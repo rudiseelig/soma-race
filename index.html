@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOMA — Human vs AI Design Race</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Catamaran:wght@100;200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/racetrack.css">
+  <style>
+    @media (max-width: 768px) {
+      .visual-teaser-section {
+        padding: 2rem 0 !important;
+      }
+      .visual-teaser-section .split-container {
+        border-left: none;
+        border-right: none;
+      }
+    }
+  </style>
+</head>
+<body class="page-home">
+  <div class="cursor-follower"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo"></div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active" data-num="00">Home</a></li>
+      <li><a href="pages/briefing.html" data-num="01">The Briefing</a></li>
+      <li><a href="pages/process.html" data-num="02">The Process</a></li>
+      <li><a href="pages/results.html" data-num="03">The Results</a></li>
+      <li><a href="pages/survey.html" data-num="04">Survey</a></li>
+    </ul>
+    <div class="nav-counter mono">01/05</div>
+    <div class="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- Rotary Dial Menu (mobile) -->
+  <div class="rotary-overlay" id="rotary-overlay">
+    <div class="rotary-dial" id="rotary-dial">
+      <div class="arc-circle"></div>
+      <div class="dial-items" id="dial-items">
+        <a href="index.html" class="dial-item active" data-index="0">
+          <span class="dial-dot"></span>
+          <span class="dial-num">00</span>
+          <span class="dial-label">Home</span>
+        </a>
+        <a href="pages/briefing.html" class="dial-item" data-index="1">
+          <span class="dial-dot"></span>
+          <span class="dial-num">01</span>
+          <span class="dial-label">The Briefing</span>
+        </a>
+        <a href="pages/process.html" class="dial-item" data-index="2">
+          <span class="dial-dot"></span>
+          <span class="dial-num">02</span>
+          <span class="dial-label">The Process</span>
+        </a>
+        <a href="pages/results.html" class="dial-item" data-index="3">
+          <span class="dial-dot"></span>
+          <span class="dial-num">03</span>
+          <span class="dial-label">The Results</span>
+        </a>
+        <a href="pages/survey.html" class="dial-item" data-index="4">
+          <span class="dial-dot"></span>
+          <span class="dial-num">04</span>
+          <span class="dial-label">Survey</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================
+       HERO — RACE TRACK
+       ============================ -->
+  <section class="hero race-hero section-dark">
+    <div class="hero-svg-wrapper">
+      <img src="assets/svg/WEBSITE-Header.svg" class="hero-svg hero-svg-desktop" alt="Ketevani Kushashvili VS AI — A Design Race">
+      <img src="assets/svg/WEBSITE-Header-for mobile.svg" class="hero-svg hero-svg-mobile" alt="Ketevani Kushashvili VS AI — A Design Race">
+    </div>
+  </section>
+
+  <!-- Intro Section -->
+  <section class="section">
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator-bar">
+      <div class="hero-scroll-indicator">Scroll to explore</div>
+    </div>
+    <div class="section-header reveal">
+      <div class="section-label">001 — Introduction</div>
+      <h2 class="section-title">Can a machine<br><span class="display-text">out-design</span> a human?</h2>
+    </div>
+
+    <div style="max-width: 700px;" class="reveal">
+      <p style="font-size: 1.1rem; line-height: 1.8; opacity: 0.7; margin-bottom: 2rem;">
+        Both received the same brief: create a complete brand identity for <strong>SOMA</strong>,
+        a modern aphrodisiac oil. One is a human designer working through research, intuition,
+        and craft. The other is an artificial intelligence processing data, patterns, and
+        probabilities.
+      </p>
+      <p style="font-size: 1.1rem; line-height: 1.8; opacity: 0.7;">
+        This website documents their parallel journeys — from the same starting point to
+        two very different destinations. Explore the process, compare the results, and
+        decide for yourself.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+  </section>
+
+  <!-- Visual Teaser Section -->
+  <section class="section section-dark visual-teaser-section" style="padding: 6rem 0;">
+    <div class="split-container" style="max-width: 1400px; margin: 0 auto; border-color: rgba(255,255,255,0.15);">
+      <div class="split-panel human" style="border-color: rgba(255,255,255,0.15);">
+        <div class="panel-label">Human Designer</div>
+        <div style="overflow: hidden;">
+          <img src="assets/img/Human Design Preview.jpg" alt="Human design preview for SOMA" style="width: 100%; height: auto; display: block;">
+        </div>
+        <p style="margin-top: 1.5rem; font-size: 0.85rem; opacity: 0.5; line-height: 1.7;">
+          Research-driven, emotionally guided, handcrafted through iteration and intuition.
+        </p>
+      </div>
+      <div class="split-panel ai">
+        <div class="panel-label">AI Designer</div>
+        <div style="overflow: hidden;">
+          <img src="assets/img/AI Design Preview.jpg" alt="AI design preview for SOMA" style="width: 100%; height: auto; display: block;">
+        </div>
+        <p style="margin-top: 1.5rem; font-size: 0.85rem; opacity: 0.5; line-height: 1.7;">
+          Data-informed, pattern-matched, generated through prompts and parameters.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA / Navigation to other pages -->
+  <section class="section" style="text-align: center; padding: 6rem 2rem;">
+    <div class="reveal">
+      <div class="section-label" style="justify-content: center;">Begin the journey</div>
+      <h2 class="section-title" style="margin-bottom: 3rem;">Explore the<br><span class="display-text">race</span></h2>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+        <a href="pages/briefing.html" class="cta-link">01 — The Briefing →</a>
+        <a href="pages/process.html" class="cta-link">02 — The Process →</a>
+        <a href="pages/results.html" class="cta-link">03 — The Results →</a>
+        <a href="pages/survey.html" class="cta-link">04 — Survey Data →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker-content">
+      HUMAN VS AI — DESIGN RACE — SOMA BRANDING — BACHELOR THESIS 2026 — WHO DESIGNS BETTER? — HUMAN VS AI — DESIGN RACE — SOMA BRANDING — BACHELOR THESIS 2026 — WHO DESIGNS BETTER? —
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-label">About</div>
+        <p>This website is part of a bachelor thesis exploring the intersection of human creativity and artificial intelligence in the field of brand design.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-label">Navigate</div>
+        <a href="index.html">Home</a>
+        <a href="pages/briefing.html">The Briefing</a>
+        <a href="pages/process.html">The Process</a>
+        <a href="pages/results.html">The Results</a>
+        <a href="pages/survey.html">Survey</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-label">Credits</div>
+        <p>Bachelor Thesis — 2026</p>
+        <p style="margin-top: 0.5rem;">Ketevani Kushashvili</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">© 2026 Ketevani Kushashvili</div>
+      <div class="footer-bottom-right"><a href="mailto:ketikushashvili@gmail.com" style="opacity:0.6;">ketikushashvili@gmail.com</a> · <a href="pages/impressum.html" style="opacity:0.6;">Impressum</a></div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/racetrack.js"></script>
+  <script>
+  // Rotary dial menu
+  (function() {
+    if (window.innerWidth > 768) return;
+
+    var overlay = document.getElementById('rotary-overlay');
+    var dialItems = document.getElementById('dial-items');
+    var hamburger = document.querySelector('.hamburger');
+    var items = document.querySelectorAll('.dial-item');
+    var dial = document.getElementById('rotary-dial');
+
+    if (!overlay || !dialItems || !hamburger || !dial) return;
+
+    var radius = dial.offsetWidth / 2;
+    var itemCount = items.length;
+    var angleSpread = 15; // degrees between items
+    var startAngle = -((itemCount - 1) * angleSpread) / 2; // center items vertically
+    var currentRotation = 0;
+    var isDragging = false;
+    var startY = 0;
+    var lastY = 0;
+    var velocity = 0;
+
+    // Position items along the right edge of the circle
+    function positionItems() {
+      radius = dial.offsetWidth / 2;
+      items.forEach(function(item, i) {
+        var angle = startAngle + (i * angleSpread);
+        var rad = angle * (Math.PI / 180);
+        var x = radius + Math.cos(rad) * radius;
+        var y = radius + Math.sin(rad) * radius;
+        item.style.left = x + 'px';
+        item.style.top = y + 'px';
+        item.style.transform = 'translate(0, -50%)';
+      });
+    }
+
+    // Open/close
+    hamburger.addEventListener('click', function() {
+      var isOpen = overlay.classList.toggle('open');
+      hamburger.classList.toggle('active');
+      document.querySelector('nav').classList.toggle('rotary-open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+      if (isOpen) {
+        setTimeout(positionItems, 10);
+      }
+    });
+
+    // On link click — keep overlay visible during navigation to prevent flash
+    items.forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        // Don't close the overlay — let it stay as a dark screen while the page loads
+      });
+    });
+
+    // Drag to rotate
+    function onStart(e) {
+      isDragging = true;
+      var touch = e.touches ? e.touches[0] : e;
+      startY = touch.clientY;
+      lastY = startY;
+      velocity = 0;
+      dialItems.style.transition = 'none';
+    }
+
+    function onMove(e) {
+      if (!isDragging) return;
+      var touch = e.touches ? e.touches[0] : e;
+      var deltaY = touch.clientY - lastY;
+      velocity = deltaY;
+      lastY = touch.clientY;
+      currentRotation += deltaY * 0.3;
+      // Clamp rotation
+      var maxRot = 20;
+      var minRot = -20;
+      currentRotation = Math.max(minRot, Math.min(maxRot, currentRotation));
+      dialItems.style.transform = 'rotate(' + currentRotation + 'deg)';
+    }
+
+    function onEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      dialItems.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      // Snap to nearest item
+      var snapAngle = Math.round(currentRotation / angleSpread) * angleSpread;
+      snapAngle = Math.max(-20, Math.min(20, snapAngle));
+      currentRotation = snapAngle;
+      dialItems.style.transform = 'rotate(' + currentRotation + 'deg)';
+    }
+
+    overlay.addEventListener('touchstart', onStart, { passive: true });
+    overlay.addEventListener('touchmove', onMove, { passive: true });
+    overlay.addEventListener('touchend', onEnd);
+    overlay.addEventListener('mousedown', onStart);
+    overlay.addEventListener('mousemove', onMove);
+    overlay.addEventListener('mouseup', onEnd);
+    overlay.addEventListener('mouseleave', onEnd);
+
+    // Initial position on resize
+    window.addEventListener('resize', function() {
+      if (overlay.classList.contains('open')) positionItems();
+    });
+  })();
+  </script>
+</body>
+</html>

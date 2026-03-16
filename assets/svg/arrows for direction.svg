@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1353.38 1000">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #231f20;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 12.33px;
+      }
+    </style>
+  </defs>
+  <polygon class="cls-1" points="346.74 710.04 556.77 500 346.74 289.96 173.57 289.96 383.6 500 173.57 710.04 346.74 710.04"/>
+  <polygon class="cls-1" points="656.75 710.04 866.79 500 656.75 289.96 483.58 289.96 693.62 500 483.58 710.04 656.75 710.04"/>
+  <polygon class="cls-1" points="969.78 710.04 1179.81 500 969.78 289.96 796.61 289.96 1006.64 500 796.61 710.04 969.78 710.04"/>
+</svg>

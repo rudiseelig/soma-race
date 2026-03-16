@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Process — SOMA Race</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Catamaran:wght@100;200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* --- Folder Steps --- */
+    .folder-steps {
+      position: relative;
+      padding: 2rem 0;
+    }
+
+    /* Number strip — the row of large numbers */
+    .folder-number-strip {
+      display: flex;
+      gap: 0;
+      position: relative;
+      width: 100%;
+    }
+
+    .folder-tab {
+      flex: 1;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-right: none;
+      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      min-height: 280px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    .folder-tab:last-child {
+      border-right: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .folder-tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      opacity: 0.6;
+      transition: opacity 0.3s ease, height 0.4s ease;
+    }
+
+    .folder-tab:nth-child(1)::before { background: var(--human); }
+    .folder-tab:nth-child(2)::before { background: #e8a020; }
+    .folder-tab:nth-child(3)::before { background: #c85a28; }
+    .folder-tab:nth-child(4)::before { background: var(--ai); }
+    .folder-tab:nth-child(5)::before { background: #20b060; }
+    .folder-tab:nth-child(6)::before { background: #f0c030; }
+    .folder-tab:nth-child(7)::before { background: #8050d0; }
+
+    .folder-tab:hover::before {
+      opacity: 1;
+      height: 6px;
+    }
+
+    .folder-tab.active::before {
+      opacity: 1;
+      height: 6px;
+    }
+
+    .folder-tab .folder-num {
+      font-family: var(--display);
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: 0.85;
+      opacity: 0.08;
+      transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .folder-tab:hover .folder-num {
+      opacity: 0.15;
+    }
+
+    .folder-tab.active .folder-num {
+      opacity: 0.2;
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    .folder-tab .folder-label {
+      font-family: var(--mono);
+      font-size: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      opacity: 0.4;
+      transition: opacity 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .folder-tab .folder-title {
+      font-family: var(--condensed);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.4rem;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: opacity 0.4s ease 0.1s, max-height 0.4s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .folder-tab:hover .folder-label,
+    .folder-tab.active .folder-label {
+      opacity: 0.7;
+    }
+
+    .folder-tab:hover .folder-title,
+    .folder-tab.active .folder-title {
+      opacity: 0.5;
+      max-height: 2rem;
+    }
+
+    /* Expanded folder content — the split screen */
+    .folder-content-area {
+      position: relative;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .folder-content-area.open {
+      max-height: 1200px;
+    }
+
+    .folder-panel {
+      display: none;
+      padding: 3rem 0 2rem;
+    }
+
+    .folder-panel.active {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      animation: folderSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes folderSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .folder-half {
+      padding: 2.5rem;
+      border: 1px solid rgba(0,0,0,0.06);
+      position: relative;
+    }
+
+    .folder-half.human-half {
+      border-right: none;
+      border-left: 3px solid var(--human);
+    }
+
+    .folder-half.ai-half {
+      border-left: 3px solid var(--ai);
+    }
+
+    .folder-half .half-tag {
+      font-family: var(--mono);
+      font-size: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      opacity: 0.5;
+      margin-bottom: 0.8rem;
+    }
+
+    .folder-half .half-tag.human-tag { color: var(--human); }
+    .folder-half .half-tag.ai-tag { color: var(--ai); }
+
+    .folder-half h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      font-family: var(--condensed);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .folder-half p {
+      font-size: 0.82rem;
+      line-height: 1.75;
+      opacity: 0.6;
+    }
+
+    .time-badge {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid rgba(0,0,0,0.12);
+      margin-top: 1.2rem;
+      opacity: 0.4;
+    }
+
+    .time-badge.human-time { border-color: rgba(255,61,0,0.25); }
+    .time-badge.ai-time { border-color: rgba(58,251,4,0.25); }
+
+    /* Close button for expanded panel */
+    .folder-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 28px;
+      height: 28px;
+      background: none;
+      border: 1px solid rgba(0,0,0,0.1);
+      color: inherit;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0.3;
+      transition: opacity 0.2s ease, border-color 0.2s ease;
+      z-index: 5;
+    }
+
+    .folder-close:hover {
+      opacity: 0.8;
+      border-color: var(--human);
+    }
+
+    .mindmap-section {
+      margin: 4rem 0;
+      padding: 4rem;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.2);
+      position: relative;
+    }
+
+    /* Hide default cursor follower, show car followers */
+    .cursor-follower { display: none !important; }
+    .car-follower {
+      position: fixed;
+      width: 128px;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    #car2-follower {
+      transform: translate(-50%, -50%) scaleX(-1);
+    }
+    .car-follower.visible { opacity: 1; }
+    .car-follower.on-dark { /* no filter change */ }
+
+    @media (max-width: 768px) {
+      .car-follower {
+        display: none !important;
+      }
+    }
+
+    /* Race Map */
+    .race-map-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      margin: 3rem auto 0;
+    }
+    .race-map-wrapper object {
+      width: 100%;
+      display: block;
+    }
+    .map-hotspot {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: transparent;
+      border: 2px solid transparent;
+      transform: translate(-50%, -50%);
+      transition: all 0.3s ease;
+      z-index: 5;
+    }
+    .map-hotspot:hover, .map-hotspot.active {
+      border-color: #3afb04;
+      background: rgba(58,251,4,0.15);
+      box-shadow: 0 0 20px rgba(58,251,4,0.3);
+    }
+    .map-info-card {
+      position: absolute;
+      width: 300px;
+      padding: 1.8rem;
+      background: #161616;
+      color: #f5f4ef;
+      border: 1px solid rgba(58,251,4,0.2);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.35s ease;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .map-info-card.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .map-info-card .card-num {
+      font-family: var(--display);
+      font-size: 2rem;
+      color: #ff3d00;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .map-info-card h4 {
+      font-size: 0.9rem;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .map-info-card p {
+      font-size: 0.75rem;
+      line-height: 1.7;
+      opacity: 0.65;
+    }
+    .map-info-card .info-time {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      color: #ff3d00;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.8rem;
+      display: block;
+    }
+    .map-info-close {
+      position: absolute;
+      top: 0.8rem;
+      right: 0.8rem;
+      width: 24px;
+      height: 24px;
+      background: none;
+      border: 1px solid rgba(245,244,239,0.15);
+      color: #f5f4ef;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+      transition: all 0.2s ease;
+    }
+    .map-info-close:hover {
+      border-color: #ff3d00;
+      color: #ff3d00;
+    }
+    .map-info-card .highlight {
+      color: #3afb04;
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .folder-number-strip {
+        flex-wrap: wrap;
+      }
+      .folder-tab {
+        flex: none;
+        width: calc(33.333% - 0px);
+        min-height: 120px;
+        padding: 0.8rem;
+      }
+      .folder-tab .folder-num {
+        font-size: 3rem;
+      }
+      .folder-tab .folder-label {
+        font-size: 0.45rem;
+      }
+      .folder-tab .folder-title {
+        font-size: 0.6rem;
+      }
+      .folder-panel.active {
+        grid-template-columns: 1fr;
+      }
+      .folder-content-area.open {
+        max-height: 2400px; /* taller for stacked panels */
+      }
+      .folder-half {
+        padding: 1.5rem;
+      }
+      .folder-half.human-half {
+        border-right: 1px solid rgba(0,0,0,0.06);
+        border-bottom: none;
+      }
+      .folder-half.ai-half {
+        border-left: 3px solid var(--ai);
+      }
+      .folder-half h3 {
+        font-size: 0.95rem;
+      }
+      .folder-half p {
+        font-size: 0.78rem;
+      }
+      .time-badge {
+        font-size: 0.5rem;
+      }
+      .mindmap-section {
+        padding: 2rem;
+      }
+      .map-info-card {
+        width: 200px;
+        padding: 1rem;
+        font-size: 0.85rem;
+      }
+      .map-info-card h4 {
+        font-size: 0.8rem;
+      }
+      .map-info-card p {
+        font-size: 0.7rem;
+      }
+      .map-hotspot {
+        width: 36px;
+        height: 36px;
+      }
+      .race-map-section {
+        padding: 3rem 1.5rem !important;
+      }
+      .race-map-wrapper {
+        margin: 2rem auto 0;
+      }
+      .time-comparison-flex {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 1.5rem !important;
+      }
+      .time-vs {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .race-map-section {
+        padding: 2.5rem 1rem !important;
+      }
+      .narrative-section {
+        padding: 3rem 1rem !important;
+      }
+      .folder-tab {
+        width: calc(50% - 0px);
+        min-height: 100px;
+        padding: 0.6rem;
+      }
+      .folder-tab .folder-num {
+        font-size: 2.5rem;
+      }
+      .folder-half {
+        padding: 1.2rem;
+      }
+      .map-info-card {
+        width: 180px;
+        padding: 0.8rem;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 100;
+      }
+      .map-info-card.visible {
+        transform: translate(-50%, -50%);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor-follower"></div>
+  <img src="../assets/svg/Car 1.svg" class="car-follower" id="car1-follower" alt="">
+  <img src="../assets/svg/Car 2.svg" class="car-follower" id="car2-follower" alt="">
+
+  <nav>
+    <a href="../index.html" class="logo"></a>
+    <ul class="nav-links">
+      <li><a href="../index.html" data-num="00">Home</a></li>
+      <li><a href="briefing.html" data-num="01">The Briefing</a></li>
+      <li><a href="process.html" class="active" data-num="02">The Process</a></li>
+      <li><a href="results.html" data-num="03">The Results</a></li>
+      <li><a href="survey.html" data-num="04">Survey</a></li>
+    </ul>
+    <div class="nav-counter mono">03/05</div>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <!-- Rotary Dial Menu (mobile) -->
+  <div class="rotary-overlay" id="rotary-overlay">
+    <div class="rotary-dial" id="rotary-dial">
+      <div class="arc-circle"></div>
+      <div class="dial-items" id="dial-items">
+        <a href="../index.html" class="dial-item" data-index="0">
+          <span class="dial-dot"></span>
+          <span class="dial-num">00</span>
+          <span class="dial-label">Home</span>
+        </a>
+        <a href="briefing.html" class="dial-item" data-index="1">
+          <span class="dial-dot"></span>
+          <span class="dial-num">01</span>
+          <span class="dial-label">The Briefing</span>
+        </a>
+        <a href="process.html" class="dial-item active" data-index="2">
+          <span class="dial-dot"></span>
+          <span class="dial-num">02</span>
+          <span class="dial-label">The Process</span>
+        </a>
+        <a href="results.html" class="dial-item" data-index="3">
+          <span class="dial-dot"></span>
+          <span class="dial-num">03</span>
+          <span class="dial-label">The Results</span>
+        </a>
+        <a href="survey.html" class="dial-item" data-index="4">
+          <span class="dial-dot"></span>
+          <span class="dial-num">04</span>
+          <span class="dial-label">Survey</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero section-dark" style="height: 60vh;">
+    <div class="micro-elements" data-count="12"></div>
+    <div class="corner-mark tl">003 / 005</div>
+    <div class="corner-mark tr">PARALLEL PATHS</div>
+
+    <h1 class="hero-title" style="font-size: clamp(2.5rem, 8vw, 7rem);">
+      The<br><span class="display-text">Process</span>
+    </h1>
+    <p class="hero-subtitle">Two parallel workflows — side by side</p>
+  </section>
+
+  <!-- Process Comparison -->
+  <section class="section" style="padding-bottom: 4rem;">
+    <div class="section-header reveal">
+      <div class="section-label">003 — Parallel Paths</div>
+      <h2 class="section-title">How they <span class="display-text">approached</span> it</h2>
+    </div>
+
+    <!-- Folder Steps -->
+    <div class="folder-steps reveal-scale">
+
+      <!-- Number Strip -->
+      <div class="folder-number-strip">
+        <div class="folder-tab" data-step="1">
+          <span class="folder-num">1</span>
+          <span class="folder-label">Step 01</span>
+          <span class="folder-title">Sourcing / Brief</span>
+        </div>
+        <div class="folder-tab" data-step="2">
+          <span class="folder-num">2</span>
+          <span class="folder-label">Step 02</span>
+          <span class="folder-title">Research / Moodboard</span>
+        </div>
+        <div class="folder-tab" data-step="3">
+          <span class="folder-num">3</span>
+          <span class="folder-label">Step 03</span>
+          <span class="folder-title">Color / Typography</span>
+        </div>
+        <div class="folder-tab" data-step="4">
+          <span class="folder-num">4</span>
+          <span class="folder-label">Step 04</span>
+          <span class="folder-title">Logo Design</span>
+        </div>
+        <div class="folder-tab" data-step="5">
+          <span class="folder-num">5</span>
+          <span class="folder-label">Step 05</span>
+          <span class="folder-title">Photography / Mockups</span>
+        </div>
+        <div class="folder-tab" data-step="6">
+          <span class="folder-num">6</span>
+          <span class="folder-label">Step 06</span>
+          <span class="folder-title">Copy / Voice</span>
+        </div>
+        <div class="folder-tab" data-step="7">
+          <span class="folder-num">7</span>
+          <span class="folder-label">Step 07</span>
+          <span class="folder-title">Final Delivery</span>
+        </div>
+      </div>
+
+      <!-- Expandable Content Panels -->
+      <div class="folder-content-area">
+
+        <!-- Step 1 -->
+        <div class="folder-panel" data-panel="1">
+          <div class="folder-half human-half">
+            <button class="folder-close">&times;</button>
+            <div class="half-tag human-tag">Human</div>
+            <h3>Product Sourcing</h3>
+            <p>The first obstacle was physical. Finding a real oil bottle to photograph meant navigating suppliers with 50+ unit minimums. Eventually, a single sample was ordered from China — a two-week wait before any visual work could begin. The human track needed a tangible object. That constraint shaped everything.</p>
+            <div class="time-badge human-time">4–5 hours research + 2 weeks waiting</div>
+          </div>
+          <div class="folder-half ai-half">
+            <div class="half-tag ai-tag">AI</div>
+            <h3>Brief Intake & Setup</h3>
+            <p>ChatGPT received the SOMA briefing and immediately went off-script — proposing a completely new brand called "Velora." The briefing had to be resent twice. Once corrected, it self-organized into eight phases: analysis, moodboard, palette, logo, packaging, campaign, messaging, and brand experience. The structure was sound. The attention span wasn't.</p>
+            <div class="time-badge ai-time">~10 minutes</div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="folder-panel" data-panel="2">
+          <div class="folder-half human-half">
+            <button class="folder-close">&times;</button>
+            <div class="half-tag human-tag">Human</div>
+            <h3>Visual Research & References</h3>
+            <p>Eight to nine hours building a visual reference library — not collecting what looked usable, but developing an instinct for what SOMA <em>shouldn't</em> look like. The brief's restrictions (no florals, nothing clinical, nothing erotic) proved harder to navigate than expected. Many references that initially felt right were quietly violating at least one rule.</p>
+            <div class="time-badge human-time">8–9 hours</div>
+          </div>
+          <div class="folder-half ai-half">
+            <div class="half-tag ai-tag">AI</div>
+            <h3>Moodboard via Midjourney</h3>
+            <p>ChatGPT generated Midjourney prompts on its own — explaining rationale for each visual direction. Then the aphrodisiac angle hit content filters. Prompts were rejected, reworded, rejected again. Success rate: around 50%. Twelve usable generations required double that in failed attempts. Not exactly the frictionless revolution the marketing promises.</p>
+            <div class="time-badge ai-time">~20 minutes (+ filter wrestling)</div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="folder-panel" data-panel="3">
+          <div class="folder-half human-half">
+            <button class="folder-close">&times;</button>
+            <div class="half-tag human-tag">Human</div>
+            <h3>Color Palette Development</h3>
+            <p>A sunset lamp was brought in — testing how earth tones actually behaved under warm, physical lighting rather than relying on screen-based color pickers. Colors that look balanced on a monitor can feel completely different applied to a physical surface. The final palette was grounded in that real-world experience, not a digital swatch generator.</p>
+            <div class="time-badge human-time">~2 hours</div>
+          </div>
+          <div class="folder-half ai-half">
+            <div class="half-tag ai-tag">AI</div>
+            <h3>Color & Typography</h3>
+            <p>ChatGPT pulled colors directly from the Midjourney moodboard outputs — earthy, muted, warm. Exactly what the brief asked for. Typography landed on Canela, a serif with enough softness to fit the intimate positioning without feeling old-fashioned. A solid junior-designer-level pairing, arrived at without exploration or doubt.</p>
+            <div class="time-badge ai-time">~5 minutes</div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="folder-panel" data-panel="4">
+          <div class="folder-half human-half">
+            <button class="folder-close">&times;</button>
+            <div class="half-tag human-tag">Human</div>
+            <h3>Logo Design — The Honey Breakthrough</h3>
+            <p>The longest stage. A week of dead ends with typographic approaches that never felt right. The brand needed hand-touched and organic — not rustic. The solution emerged from frustration: painting letters on paper, then tracing them with <strong>honey</strong>. The honey was photographed, scanned, and manually vectorized in Illustrator. The final logo carries the imperfections of something literally made by hand. Not simulated — actual.</p>
+            <div class="time-badge human-time">~1 week</div>
+          </div>
+          <div class="folder-half ai-half">
+            <div class="half-tag ai-tag">AI</div>
+            <h3>Logo Generation</h3>
+            <p>Nine symbol concepts alongside the SOMA wordmark. ChatGPT chose a drop shape with a curved S interior line — referencing oil and the brand name. Conceptually sound and visually cohesive. But AI outputs rasters, logos need vectors. Manual vectorization in Figma became unavoidable — a technical limitation no prompt can solve.</p>
+            <div class="time-badge ai-time">~15 minutes (+ manual vectorization)</div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="folder-panel" data-panel="5">
+          <div class="folder-half human-half">
+            <button class="folder-close">&times;</button>
+            <div class="half-tag human-tag">Human</div>
+            <h3>Product Photography</h3>
+            <p>Two cameras, a mini light box, and the sunset lamp for color consistency. The dropper pipette didn't fit inside the outer packaging — resolved through compositing in Photoshop. Four hours of shooting, four to five of editing. Final photographs were heavily retouched, supplemented with human-made stock from Cosmos chosen for tonal consistency.</p>
+            <div class="time-badge human-time">4h shooting + 4–5h editing</div>
+          </div>
+          <div class="folder-half ai-half">
+            <div class="half-tag ai-tag">AI</div>
+            <h3>Packaging Mockups</h3>
+            <p>The strongest AI deliverables. Classic brown pipette bottles. Paper boxes with that apothecary feel. Labels with actual readable text — not the gibberish AI images often produce. Back panels with serial numbers, QR codes, ingredient lists. These could sit in a client presentation without embarrassment.</p>
+            <div class="time-badge ai-time">~15 minutes</div>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="folder-panel" data-panel="6">
+          <div class="folder-half human-half">
+            <button class="folder-close">&times;</button>
+            <div class="half-tag human-tag">Human</div>
+            <h3>Copywriting & Brand Voice</h3>
+            <p>English isn't the native language — writing sensual, refined copy without tipping into awkwardness required extensive input from friends, colleagues, and the supervising professor. Not formal feedback sessions but ongoing, informal rounds that continued across most of the project. Getting the tone right for an intimacy brand, in a second language, was one of the more humbling parts.</p>
+            <div class="time-badge human-time">5–6 hours</div>
+          </div>
+          <div class="folder-half ai-half">
+            <div class="half-tag ai-tag">AI</div>
+            <h3>Messaging & Voice Definition</h3>
+            <p>ChatGPT defined the tone of voice, generated taglines, and wrote brand copy in one pass. References came from general high-end wellness aesthetics — Aesop, Grown Alchemist — without directly copying. The output was polished and consistent. Whether it carries genuine emotional resonance or sophisticated pastiche is the question the survey asks.</p>
+            <div class="time-badge ai-time">~10 minutes</div>
+          </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="folder-panel" data-panel="7">
+          <div class="folder-half human-half">
+            <button class="folder-close">&times;</button>
+            <div class="half-tag human-tag">Human</div>
+            <h3>Website Prototype & Brand Book</h3>
+            <p>The website prototype took two to three hours — by this point the identity was established enough that decisions were already made. Brand book documentation consumed another five hours: compiling the visual identity, rationale, and process into a structured presentation. In total: 33–38 active hours, two cameras, honey, olive oil, a sunset lamp, and one package from China.</p>
+            <div class="time-badge human-time">7–8 hours combined</div>
+          </div>
+          <div class="folder-half ai-half">
+            <div class="half-tag ai-tag">AI</div>
+            <h3>Brand Experience & Final Package</h3>
+            <p>The full AI brand package — from brief to finished deliverables — took around two hours with ChatGPT. Gemini Pro completed it in under one hour but with noticeably lower quality: muddy moodboards, an uncorrectable shadow artifact across every mockup, and less detail. The system needing more human management produced better results. The independent one delivered less.</p>
+            <div class="time-badge ai-time">~2 hours total (ChatGPT)</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Race Map Section -->
+  <section id="race-map-section" class="section race-map-section" style="background: rgba(255,255,255,0.35); padding: 6rem 2.5rem;">
+    <div class="section-header reveal">
+      <div class="section-label">003.1 — Design Journey</div>
+      <h2 class="section-title">The <span class="display-text">race map</span></h2>
+    </div>
+
+    <div class="race-map-wrapper reveal-scale">
+      <object type="image/svg+xml" data="../assets/svg/race-mindmap.svg" style="width:100%;" aria-label="Design Process Race Map"></object>
+
+      <!-- Hotspots positioned over numbered circles -->
+      <div class="map-hotspot" data-stop="1" style="left:35.2%;top:16.8%"></div>
+      <div class="map-hotspot" data-stop="2" style="left:50.6%;top:51.1%"></div>
+      <div class="map-hotspot" data-stop="3" style="left:59.8%;top:71.8%"></div>
+      <div class="map-hotspot" data-stop="4" style="left:69.2%;top:51.3%"></div>
+      <div class="map-hotspot" data-stop="5" style="left:80.7%;top:44.7%"></div>
+      <div class="map-hotspot" data-stop="6" style="left:73.7%;top:79.5%"></div>
+      <div class="map-hotspot" data-stop="7" style="left:46.6%;top:80.5%"></div>
+      <div class="map-hotspot" data-stop="8" style="left:19.3%;top:50.6%"></div>
+
+      <!-- Info cards -->
+      <div class="map-info-card" id="info-1" style="left:38%;top:4%">
+        <button class="map-info-close">✕</button>
+        <div class="card-num">01</div>
+        <h4>Product Sourcing</h4>
+        <p>Physical bottle needed — ordered from a China supplier, just 1 unit. Two-week shipping wait. Minimum order quantity was 50+, a real obstacle for a student project.</p>
+        <span class="info-time">4–5 hours</span>
+      </div>
+
+      <div class="map-info-card" id="info-2" style="left:53%;top:38%">
+        <button class="map-info-close">✕</button>
+        <div class="card-num">02</div>
+        <h4>Visual Research</h4>
+        <p>Building a reference library — but more importantly, defining what <em>not</em> to look like. No florals, nothing clinical, nothing erotic. The intimate care category is surprisingly hard to navigate visually.</p>
+        <span class="info-time">8–9 hours</span>
+      </div>
+
+      <div class="map-info-card" id="info-3" style="left:62%;top:59%">
+        <button class="map-info-close">✕</button>
+        <div class="card-num">03</div>
+        <h4>Color Palette</h4>
+        <p>Tested colors under a sunset lamp — physical light, not screen. Earth tones and warmth emerged. The palette was grounded in real light conditions, not digital swatches.</p>
+        <span class="info-time">2 hours</span>
+      </div>
+
+      <div class="map-info-card" id="info-4" style="left:55%;top:38%">
+        <button class="map-info-close">✕</button>
+        <div class="card-num">04</div>
+        <h4>Logo Design</h4>
+        <p>Multiple dead ends with typographic approaches. Then the <span class="highlight">honey breakthrough</span> — hand-painted lettering with actual honey, photographed, scanned, and manually vectorized in Adobe Illustrator.</p>
+        <span class="info-time">~1 week</span>
+      </div>
+
+      <div class="map-info-card" id="info-5" style="left:67%;top:32%">
+        <button class="map-info-close">✕</button>
+        <div class="card-num">05</div>
+        <h4>Photography</h4>
+        <p>Two cameras, a mini light box, and the sunset lamp. The pipette didn't fit inside the packaging — resolved through compositing in Photoshop. Cosmos stock photos for tonal consistency.</p>
+        <span class="info-time">4h shoot + 4–5h editing</span>
+      </div>
+
+      <div class="map-info-card" id="info-6" style="left:60%;top:67%">
+        <button class="map-info-close">✕</button>
+        <div class="card-num">06</div>
+        <h4>Copywriting</h4>
+        <p>Writing sensual copy in English as a second language. Friends, colleagues, and a professor gave feedback on tone — navigating cultural nuance around intimacy required emotional sensitivity.</p>
+        <span class="info-time">5–6 hours</span>
+      </div>
+
+      <div class="map-info-card" id="info-7" style="left:34%;top:68%">
+        <button class="map-info-close">✕</button>
+        <div class="card-num">07</div>
+        <h4>Brand Book</h4>
+        <p>Compiling everything — palette, typography, logo usage, photography guidelines, and tone of voice — into a comprehensive brand guide that documents the complete system.</p>
+        <span class="info-time">5 hours</span>
+      </div>
+
+      <div class="map-info-card" id="info-8" style="left:22%;top:38%">
+        <button class="map-info-close">✕</button>
+        <div class="card-num">08</div>
+        <h4>Website Prototype</h4>
+        <p>Prototyping the brand's digital presence — translating the physical design language into a web experience that maintained the warmth and tactile quality of the brand.</p>
+        <span class="info-time">2–3 hours</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Creative Process Narrative -->
+  <section class="section section-dark narrative-section" data-theme="dark" style="background: #161616; color: #f5f4ef; padding: 6rem 2.5rem;">
+    <div class="section-header reveal">
+      <div class="section-label" style="color: #3afb04;">003.2 — The Invisible Hours</div>
+      <h2 class="section-title" style="color: #f5f4ef;">What the <span class="display-text" style="color: #ff3d00;">timesheet</span> doesn't capture</h2>
+    </div>
+
+    <div style="max-width: 720px; margin: 3rem auto 0; display: flex; flex-direction: column; gap: 3rem;">
+
+      <div class="reveal" style="border-left: 2px solid #ff3d00; padding-left: 2rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.8rem; color: #f5f4ef;">Diffuse Thinking</h3>
+        <p style="font-size: 0.85rem; line-height: 1.8; opacity: 0.7; color: #f5f4ef;">
+          The human process stretches across two months — but the active hours only tell half the story. Ideas developed in the shower, on commutes, in unrelated moments. The subconscious was processing the brand long before conscious decisions were made. This kind of slow-burning incubation doesn't appear in any time log, yet it shaped every decision from palette to packaging.
+        </p>
+      </div>
+
+      <div class="reveal" style="border-left: 2px solid #3afb04; padding-left: 2rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.8rem; color: #f5f4ef;">The Physical Gap</h3>
+        <p style="font-size: 0.85rem; line-height: 1.8; opacity: 0.7; color: #f5f4ef;">
+          Honey as a lettering medium. A sunset lamp to test color on real surfaces. Olive oil for photographic texture. Two cameras and a light box in a makeshift studio. The human track required physical materials, physical space, and physical patience — a dimension AI workflows bypass entirely. Whether that bypass is efficiency or loss depends on what you believe design should feel like.
+        </p>
+      </div>
+
+      <div class="reveal" style="border-left: 2px solid #ff3d00; padding-left: 2rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.8rem; color: #f5f4ef;">Happy Accidents</h3>
+        <p style="font-size: 0.85rem; line-height: 1.8; opacity: 0.7; color: #f5f4ef;">
+          The SOMA logo didn't come from a plan. It came from frustration — every typographic approach felt wrong. Painting with honey was an act of desperation that became the brand's signature element. AI can iterate endlessly, but it iterates within known territory. The human breakthrough came from leaving known territory behind.
+        </p>
+      </div>
+
+      <div class="reveal" style="border-left: 2px solid #3afb04; padding-left: 2rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.8rem; color: #f5f4ef;">Emotional Navigation</h3>
+        <p style="font-size: 0.85rem; line-height: 1.8; opacity: 0.7; color: #f5f4ef;">
+          Writing sensual copy in a second language. Navigating cultural nuance around intimacy. Asking friends and professors to evaluate whether the tone feels right — knowing "right" lives somewhere between confidence and vulnerability. The emotional labour of design doesn't compress into prompts. It requires a person who can feel uncertain and keep going anyway.
+        </p>
+      </div>
+
+      <div class="reveal" style="border-left: 2px solid rgba(245,244,239,0.3); padding-left: 2rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.8rem; color: #f5f4ef;">The Feedback Loop</h3>
+        <p style="font-size: 0.85rem; line-height: 1.8; opacity: 0.7; color: #f5f4ef;">
+          Not structured reviews. Not formal critiques. Conversations over coffee about whether a word feels too clinical. A professor's raised eyebrow at a color pairing. A friend saying "this one" without explaining why. Human feedback is messy, informal, and irreplaceable — it's how intuition gets validated without needing to be justified.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Time comparison visual -->
+    <div style="max-width: 720px; margin: 5rem auto 0; text-align: center;" class="reveal">
+      <div class="time-comparison-flex" style="display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap;">
+        <div style="text-align: center;">
+          <div style="font-family: var(--display); font-size: clamp(3rem, 6vw, 5rem); color: #ff3d00; line-height: 1;">33–38</div>
+          <div style="font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; margin-top: 0.5rem;">Active hours — Human</div>
+        </div>
+        <div class="time-vs" style="display: flex; align-items: center; opacity: 0.2; font-family: var(--mono); font-size: 0.7rem;">VS</div>
+        <div style="text-align: center;">
+          <div style="font-family: var(--display); font-size: clamp(3rem, 6vw, 5rem); color: #3afb04; line-height: 1;">~2</div>
+          <div style="font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; margin-top: 0.5rem;">Active hours — AI (ChatGPT)</div>
+        </div>
+      </div>
+      <p style="font-size: 0.75rem; opacity: 0.35; margin-top: 2rem; font-family: var(--mono); letter-spacing: 0.05em;">
+        + 2 months of subconscious processing · 1 package from China · countless informal conversations
+      </p>
+    </div>
+  </section>
+
+  <!-- Navigation -->
+  <section class="section" style="text-align: center; padding: 6rem 2rem;">
+    <div class="reveal">
+      <p class="display-text" style="font-size: clamp(1.5rem, 3vw, 2.5rem); max-width: 600px; margin: 0 auto 2rem; opacity: 0.6;">
+        Same destination. Very different journeys.
+      </p>
+      <a href="results.html" style="border: 1px solid var(--border); padding: 1rem 2.5rem; font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; display: inline-block;">
+        See the results →
+      </a>
+    </div>
+  </section>
+
+  <div class="ticker">
+    <div class="ticker-content">
+      RESEARCH — SKETCHES — PROMPTS — ITERATION — CRAFT — GENERATION — INTUITION — ALGORITHMS — RESEARCH — SKETCHES — PROMPTS — ITERATION — CRAFT — GENERATION — INTUITION — ALGORITHMS —
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-label">About</div>
+        <p>Bachelor thesis exploring human creativity vs artificial intelligence in brand design.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-label">Navigation</div>
+        <a href="../index.html" style="display:block;">Home</a>
+        <a href="briefing.html" style="display:block;">The Briefing</a>
+        <a href="process.html" style="display:block;">The Process</a>
+        <a href="results.html" style="display:block;">The Results</a>
+        <a href="survey.html" style="display:block;">Survey</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-label">Credits</div>
+        <p>Bachelor Thesis — 2026</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">© 2026 Ketevani Kushashvili</div>
+      <div class="footer-bottom-right"><a href="mailto:ketikushashvili@gmail.com" style="opacity:0.6;">ketikushashvili@gmail.com</a> · <a href="impressum.html" style="opacity:0.6;">Impressum</a></div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script>initHeroAnimation();</script>
+  <script>
+    // Race Map — interactive numbered stops
+    (function() {
+      var hotspots = document.querySelectorAll('.map-hotspot');
+      var cards = document.querySelectorAll('.map-info-card');
+      var closeButtons = document.querySelectorAll('.map-info-close');
+
+      function closeAll() {
+        cards.forEach(function(c) { c.classList.remove('visible'); });
+        hotspots.forEach(function(h) { h.classList.remove('active'); });
+      }
+
+      hotspots.forEach(function(hotspot) {
+        hotspot.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var stop = this.getAttribute('data-stop');
+          var card = document.getElementById('info-' + stop);
+          if (!card) return;
+          var isOpen = card.classList.contains('visible');
+          closeAll();
+          if (!isOpen) {
+            card.classList.add('visible');
+            this.classList.add('active');
+          }
+        });
+      });
+
+      closeButtons.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          closeAll();
+        });
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.map-info-card') && !e.target.closest('.map-hotspot')) {
+          closeAll();
+        }
+      });
+    })();
+  </script>
+  <script>
+    // --- Folder Steps Interaction ---
+    (function() {
+      var tabs = document.querySelectorAll('.folder-tab');
+      var panels = document.querySelectorAll('.folder-panel');
+      var contentArea = document.querySelector('.folder-content-area');
+      var closeBtns = document.querySelectorAll('.folder-close');
+      var activeStep = null;
+
+      function openStep(step) {
+        // If clicking the same tab, close it
+        if (activeStep === step) {
+          closeAll();
+          return;
+        }
+
+        activeStep = step;
+
+        // Update tab states
+        tabs.forEach(function(t) {
+          t.classList.toggle('active', t.dataset.step === step);
+        });
+
+        // Update panels
+        panels.forEach(function(p) {
+          p.classList.toggle('active', p.dataset.panel === step);
+        });
+
+        // Open content area
+        contentArea.classList.add('open');
+
+        // Smooth scroll to content area
+        setTimeout(function() {
+          contentArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }
+
+      function closeAll() {
+        activeStep = null;
+        tabs.forEach(function(t) { t.classList.remove('active'); });
+        panels.forEach(function(p) { p.classList.remove('active'); });
+        contentArea.classList.remove('open');
+      }
+
+      // Tab click handlers
+      tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          openStep(this.dataset.step);
+        });
+      });
+
+      // Close button handlers
+      closeBtns.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          closeAll();
+        });
+      });
+
+      // GSAP entrance animation for the tabs
+      if (typeof gsap !== 'undefined') {
+        gsap.from('.folder-tab', {
+          y: 40,
+          opacity: 0,
+          stagger: 0.08,
+          duration: 0.6,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.folder-number-strip',
+            start: 'top 80%',
+            once: true
+          }
+        });
+      }
+    })();
+
+    // Dual car cursor followers
+    (function() {
+      var car1 = document.getElementById('car1-follower');
+      var car2 = document.getElementById('car2-follower');
+      if (!car1 || !car2) return;
+
+      // Make cars smaller on mobile
+      if (window.innerWidth < 768) {
+        car1.style.width = '80px';
+        car1.style.height = '50px';
+        car2.style.width = '80px';
+        car2.style.height = '50px';
+      }
+
+      // Show them after a beat
+      setTimeout(function() {
+        car1.classList.add('visible');
+        car2.classList.add('visible');
+      }, 500);
+
+      function moveCars(x, y) {
+        gsap.to(car1, {
+          x: x - 50,
+          y: y - 10,
+          duration: 0.35,
+          ease: 'power2.out'
+        });
+        gsap.to(car2, {
+          x: x + 10,
+          y: y + 10,
+          duration: 0.25,
+          ease: 'power2.out'
+        });
+      }
+
+      document.addEventListener('mousemove', function(e) {
+        moveCars(e.clientX, e.clientY);
+      });
+
+      // Touch support for mobile
+      document.addEventListener('touchmove', function(e) {
+        var touch = e.touches[0];
+        moveCars(touch.clientX, touch.clientY);
+      }, { passive: true });
+
+      // Hide cars in race map section
+      var raceMapSec = document.getElementById('race-map-section');
+      if (raceMapSec) {
+        ScrollTrigger.create({
+          trigger: raceMapSec,
+          start: 'top center',
+          end: 'bottom center',
+          onEnter: function() { car1.classList.remove('visible'); car2.classList.remove('visible'); },
+          onLeave: function() { car1.classList.add('visible'); car2.classList.add('visible'); },
+          onEnterBack: function() { car1.classList.remove('visible'); car2.classList.remove('visible'); },
+          onLeaveBack: function() { car1.classList.add('visible'); car2.classList.add('visible'); }
+        });
+      }
+
+      // Dark section detection for car visibility
+      document.querySelectorAll('[data-theme="dark"]').forEach(function(sec) {
+        ScrollTrigger.create({
+          trigger: sec,
+          start: 'top center',
+          end: 'bottom center',
+          onEnter: function() { car1.classList.add('on-dark'); car2.classList.add('on-dark'); },
+          onLeave: function() { car1.classList.remove('on-dark'); car2.classList.remove('on-dark'); },
+          onEnterBack: function() { car1.classList.add('on-dark'); car2.classList.add('on-dark'); },
+          onLeaveBack: function() { car1.classList.remove('on-dark'); car2.classList.remove('on-dark'); }
+        });
+      });
+    })();
+  </script>
+  <script>
+  // Rotary dial menu
+  (function() {
+    if (window.innerWidth > 768) return;
+    var overlay = document.getElementById('rotary-overlay');
+    var dialItems = document.getElementById('dial-items');
+    var hamburger = document.querySelector('.hamburger');
+    var items = document.querySelectorAll('.dial-item');
+    var dial = document.getElementById('rotary-dial');
+    if (!overlay || !dialItems || !hamburger || !dial) return;
+    var radius = dial.offsetWidth / 2;
+    var itemCount = items.length;
+    var angleSpread = 15;
+    var startAngle = -((itemCount - 1) * angleSpread) / 2;
+    var currentRotation = 0;
+    var isDragging = false;
+    var startY = 0;
+    var lastY = 0;
+    var velocity = 0;
+    function positionItems() {
+      radius = dial.offsetWidth / 2;
+      items.forEach(function(item, i) {
+        var angle = startAngle + (i * angleSpread);
+        var rad = angle * (Math.PI / 180);
+        var x = radius + Math.cos(rad) * radius;
+        var y = radius + Math.sin(rad) * radius;
+        item.style.left = x + 'px';
+        item.style.top = y + 'px';
+        item.style.transform = 'translate(0, -50%)';
+      });
+    }
+    hamburger.addEventListener('click', function() {
+      var isOpen = overlay.classList.toggle('open');
+      hamburger.classList.toggle('active');
+      document.querySelector('nav').classList.toggle('rotary-open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+      if (isOpen) { setTimeout(positionItems, 10); }
+    });
+    items.forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        // Keep overlay visible during navigation to prevent flash
+      });
+    });
+    function onStart(e) {
+      isDragging = true;
+      var touch = e.touches ? e.touches[0] : e;
+      startY = touch.clientY; lastY = startY; velocity = 0;
+      dialItems.style.transition = 'none';
+    }
+    function onMove(e) {
+      if (!isDragging) return;
+      var touch = e.touches ? e.touches[0] : e;
+      var deltaY = touch.clientY - lastY;
+      velocity = deltaY; lastY = touch.clientY;
+      currentRotation += deltaY * 0.3;
+      currentRotation = Math.max(-20, Math.min(20, currentRotation));
+      dialItems.style.transform = 'rotate(' + currentRotation + 'deg)';
+    }
+    function onEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      dialItems.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      var snapAngle = Math.round(currentRotation / angleSpread) * angleSpread;
+      snapAngle = Math.max(-20, Math.min(20, snapAngle));
+      currentRotation = snapAngle;
+      dialItems.style.transform = 'rotate(' + currentRotation + 'deg)';
+    }
+    overlay.addEventListener('touchstart', onStart, { passive: true });
+    overlay.addEventListener('touchmove', onMove, { passive: true });
+    overlay.addEventListener('touchend', onEnd);
+    overlay.addEventListener('mousedown', onStart);
+    overlay.addEventListener('mousemove', onMove);
+    overlay.addEventListener('mouseup', onEnd);
+    overlay.addEventListener('mouseleave', onEnd);
+    window.addEventListener('resize', function() { if (overlay.classList.contains('open')) positionItems(); });
+  })();
+  </script>
+</body>
+</html>

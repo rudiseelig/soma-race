@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survey Results — SOMA Race</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Catamaran:wght@100;200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .survey-group {
+      margin-bottom: 6rem;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .survey-group-header {
+      padding: 2rem 3rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .survey-group-header h3 {
+      font-size: 1.3rem;
+    }
+
+    .survey-group-header .group-meta {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.4;
+    }
+
+    .survey-group-body {
+      padding: 3rem;
+    }
+
+    .question-block {
+      margin-bottom: 3rem;
+    }
+
+    .question-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .question-text {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
+    }
+
+    /* Donut chart container */
+    .donut-container {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .donut-chart {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .donut-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: center;
+      opacity: 0.6;
+    }
+
+    .donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      flex-shrink: 0;
+    }
+
+    .legend-dot.human { background: var(--human); }
+    .legend-dot.ai { background: var(--ai); }
+    .legend-dot.neutral { background: #999; }
+
+    /* Preference meter */
+    .preference-meter {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .meter-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      width: 60px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .meter-label.human { color: var(--human); }
+    .meter-label.ai { color: var(--ai); }
+
+    .meter-track {
+      flex: 1;
+      height: 32px;
+      background: rgba(0,0,0,0.04);
+      display: flex;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .meter-fill-human {
+      background: var(--human);
+      height: 100%;
+      transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 0.5rem;
+    }
+
+    .meter-fill-ai {
+      background: var(--ai);
+      height: 100%;
+      transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      padding-left: 0.5rem;
+    }
+
+    .meter-pct {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: white;
+      font-weight: 700;
+    }
+
+    /* Rating comparison */
+    .rating-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .rating-card {
+      padding: 1.5rem;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.3);
+      text-align: center;
+    }
+
+    .rating-score {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .rating-card.human .rating-score { color: var(--human); }
+    .rating-card.ai .rating-score { color: var(--ai); }
+
+    .rating-out-of {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      opacity: 0.4;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .survey-summary {
+      padding: 4rem;
+      border: 2px solid var(--border);
+      text-align: center;
+      background: rgba(255,255,255,0.3);
+      position: relative;
+    }
+
+    .survey-summary .summary-value {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .rating-comparison {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .survey-group {
+        margin-bottom: 4rem;
+      }
+      .survey-group-header {
+        padding: 1.5rem;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .survey-group-header h3 {
+        font-size: 1.1rem;
+      }
+      .survey-group-body {
+        padding: 1.5rem;
+      }
+      .question-block {
+        margin-bottom: 2rem;
+      }
+      .question-text {
+        font-size: 0.9rem;
+      }
+      .preference-meter {
+        gap: 0.5rem;
+      }
+      .meter-label {
+        width: 42px;
+        min-width: 42px;
+        font-size: 0.5rem;
+      }
+      .meter-track {
+        height: 28px;
+      }
+      .meter-pct {
+        font-size: 0.5rem;
+      }
+      .rating-card {
+        padding: 1.2rem;
+      }
+      .rating-score {
+        font-size: 2rem;
+      }
+      .donut-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .survey-summary {
+        padding: 2.5rem 1.5rem;
+      }
+      .survey-summary .summary-value {
+        font-size: clamp(2.5rem, 8vw, 4rem);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .survey-group-header {
+        padding: 1rem;
+      }
+      .survey-group-body {
+        padding: 1rem;
+      }
+      .preference-meter {
+        gap: 0.3rem;
+      }
+      .meter-label {
+        font-size: 0.45rem;
+        min-width: 40px;
+      }
+      .meter-track {
+        height: 24px;
+      }
+      .rating-card {
+        padding: 1rem;
+      }
+      .rating-score {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor-follower"></div>
+
+  <nav>
+    <a href="../index.html" class="logo"></a>
+    <ul class="nav-links">
+      <li><a href="../index.html" data-num="00">Home</a></li>
+      <li><a href="briefing.html" data-num="01">The Briefing</a></li>
+      <li><a href="process.html" data-num="02">The Process</a></li>
+      <li><a href="results.html" data-num="03">The Results</a></li>
+      <li><a href="survey.html" class="active" data-num="04">Survey</a></li>
+    </ul>
+    <div class="nav-counter mono">05/05</div>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <!-- Rotary Dial Menu (mobile) -->
+  <div class="rotary-overlay" id="rotary-overlay">
+    <div class="rotary-dial" id="rotary-dial">
+      <div class="arc-circle"></div>
+      <div class="dial-items" id="dial-items">
+        <a href="../index.html" class="dial-item" data-index="0">
+          <span class="dial-dot"></span>
+          <span class="dial-num">00</span>
+          <span class="dial-label">Home</span>
+        </a>
+        <a href="briefing.html" class="dial-item" data-index="1">
+          <span class="dial-dot"></span>
+          <span class="dial-num">01</span>
+          <span class="dial-label">The Briefing</span>
+        </a>
+        <a href="process.html" class="dial-item" data-index="2">
+          <span class="dial-dot"></span>
+          <span class="dial-num">02</span>
+          <span class="dial-label">The Process</span>
+        </a>
+        <a href="results.html" class="dial-item" data-index="3">
+          <span class="dial-dot"></span>
+          <span class="dial-num">03</span>
+          <span class="dial-label">The Results</span>
+        </a>
+        <a href="survey.html" class="dial-item active" data-index="4">
+          <span class="dial-dot"></span>
+          <span class="dial-num">04</span>
+          <span class="dial-label">Survey</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero section-dark" style="height: 60vh;">
+    <div class="micro-elements" data-count="12"></div>
+    <div class="corner-mark tl">005 / 005</div>
+    <div class="corner-mark tr">PUBLIC VERDICT</div>
+
+    <h1 class="hero-title" style="font-size: clamp(2.5rem, 8vw, 7rem);">
+      The<br><span class="display-text">Survey</span>
+    </h1>
+    <p class="hero-subtitle">What people thought — across different groups</p>
+  </section>
+
+  <!-- Overview Stats -->
+  <section class="section">
+    <div class="section-header reveal">
+      <div class="section-label">005 — Survey Data</div>
+      <h2 class="section-title">The <span class="display-text">verdict</span></h2>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="data-grid stagger-children" style="margin-bottom: 4rem;">
+      <div class="data-card">
+        <div class="card-label">Total Responses</div>
+        <div class="card-value">26</div>
+        <div class="card-desc">Collected March 6–12, 2026</div>
+      </div>
+      <div class="data-card">
+        <div class="card-label">Overall Winner</div>
+        <div class="card-value" style="color: var(--human);">Human</div>
+        <div class="card-desc">80.8% preferred the human-designed brand</div>
+      </div>
+      <div class="data-card">
+        <div class="card-label">AI Detected</div>
+        <div class="card-value">69%</div>
+        <div class="card-desc">Could identify which project was AI-made</div>
+      </div>
+    </div>
+
+    <div class="divider thick"></div>
+
+    <!-- ===== ALL RESPONDENTS — Overall ===== -->
+    <div class="survey-group reveal" style="margin-top: 4rem;">
+      <div class="survey-group-header">
+        <h3>Overall <span class="display-text">Preferences</span></h3>
+        <div class="group-meta">N = 26 respondents · all groups combined</div>
+      </div>
+      <div class="survey-group-body">
+
+        <div class="question-block">
+          <div class="question-text">Overall preference — which brand identity do you prefer?</div>
+          <div class="preference-meter">
+            <div class="meter-label human">Human</div>
+            <div class="meter-track">
+              <div class="meter-fill-human" style="width: 80.8%;">
+                <span class="meter-pct">80.8%</span>
+              </div>
+              <div class="meter-fill-ai" style="width: 19.2%;">
+                <span class="meter-pct">19.2%</span>
+              </div>
+            </div>
+            <div class="meter-label ai">AI</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text">Visual quality — which looks better?</div>
+          <div class="preference-meter">
+            <div class="meter-label human">Human</div>
+            <div class="meter-track">
+              <div class="meter-fill-human" style="width: 61.5%;">
+                <span class="meter-pct">61.5%</span>
+              </div>
+              <div class="meter-fill-ai" style="width: 26.9%;">
+                <span class="meter-pct">26.9%</span>
+              </div>
+            </div>
+            <div class="meter-label ai">AI</div>
+          </div>
+          <div style="font-family: var(--mono); font-size: 0.5rem; opacity: 0.35; margin-top: 0.3rem; text-align: center;">11.5% — TIE</div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text">Brand coherence — which feels more like a real brand?</div>
+          <div class="preference-meter">
+            <div class="meter-label human">Human</div>
+            <div class="meter-track">
+              <div class="meter-fill-human" style="width: 34.6%;">
+                <span class="meter-pct">34.6%</span>
+              </div>
+              <div class="meter-fill-ai" style="width: 42.3%;">
+                <span class="meter-pct">42.3%</span>
+              </div>
+            </div>
+            <div class="meter-label ai">AI</div>
+          </div>
+          <div style="font-family: var(--mono); font-size: 0.5rem; opacity: 0.35; margin-top: 0.3rem; text-align: center;">23.1% — TIE</div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text">Emotional impact — which made you feel something?</div>
+          <div class="preference-meter">
+            <div class="meter-label human">Human</div>
+            <div class="meter-track">
+              <div class="meter-fill-human" style="width: 80.8%;">
+                <span class="meter-pct">80.8%</span>
+              </div>
+              <div class="meter-fill-ai" style="width: 15.4%;">
+                <span class="meter-pct">15.4%</span>
+              </div>
+            </div>
+            <div class="meter-label ai">AI</div>
+          </div>
+          <div style="font-family: var(--mono); font-size: 0.5rem; opacity: 0.35; margin-top: 0.3rem; text-align: center;">3.8% — TIE</div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text">Average ratings across all dimensions (1–5)</div>
+          <div class="rating-comparison">
+            <div class="rating-card human">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">Human — Visual</div>
+              <div class="rating-score">4.4</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+            <div class="rating-card ai">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">AI — Visual</div>
+              <div class="rating-score">3.5</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+          </div>
+          <div class="rating-comparison" style="margin-top: 1rem;">
+            <div class="rating-card human">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">Human — Brand</div>
+              <div class="rating-score">4.2</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+            <div class="rating-card ai">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">AI — Brand</div>
+              <div class="rating-score">4.1</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+          </div>
+          <div class="rating-comparison" style="margin-top: 1rem;">
+            <div class="rating-card human">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">Human — Emotion</div>
+              <div class="rating-score">4.5</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+            <div class="rating-card ai">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">AI — Emotion</div>
+              <div class="rating-score">2.9</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== GROUP 1 — Creative ===== -->
+    <div class="survey-group reveal">
+      <div class="survey-group-header">
+        <h3>Group 1 — <span class="display-text">Creatives</span></h3>
+        <div class="group-meta">N = 4 respondents · designers + other creatives</div>
+      </div>
+      <div class="survey-group-body">
+
+        <div class="question-block">
+          <div class="question-text">Overall preference</div>
+          <div class="preference-meter">
+            <div class="meter-label human">Human</div>
+            <div class="meter-track">
+              <div class="meter-fill-human" style="width: 100%;">
+                <span class="meter-pct">100%</span>
+              </div>
+            </div>
+            <div class="meter-label ai">AI</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text">Average ratings (1–5)</div>
+          <div class="rating-comparison">
+            <div class="rating-card human">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">Human — Visual</div>
+              <div class="rating-score">4.8</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+            <div class="rating-card ai">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">AI — Visual</div>
+              <div class="rating-score">3.3</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+          </div>
+          <div class="rating-comparison" style="margin-top: 1rem;">
+            <div class="rating-card human">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">Human — Emotion</div>
+              <div class="rating-score">4.3</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+            <div class="rating-card ai">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">AI — Emotion</div>
+              <div class="rating-score">2.0</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text">Could they detect the AI?</div>
+          <div class="preference-meter">
+            <div class="meter-label" style="color: #81B29A;">Correct</div>
+            <div class="meter-track">
+              <div style="background: #81B29A; height: 100%; width: 50%; display: flex; align-items: center; justify-content: flex-end; padding-right: 0.5rem;">
+                <span class="meter-pct">50%</span>
+              </div>
+              <div style="background: #E07A5F; height: 100%; width: 50%; display: flex; align-items: center; padding-left: 0.5rem;">
+                <span class="meter-pct">50%</span>
+              </div>
+            </div>
+            <div class="meter-label" style="color: #E07A5F;">Wrong</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== GROUP 2 — Non-Creative ===== -->
+    <div class="survey-group reveal">
+      <div class="survey-group-header">
+        <h3>Group 2 — <span class="display-text">Non-Creative</span></h3>
+        <div class="group-meta">N = 15 respondents · general public</div>
+      </div>
+      <div class="survey-group-body">
+
+        <div class="question-block">
+          <div class="question-text">Overall preference</div>
+          <div class="preference-meter">
+            <div class="meter-label human">Human</div>
+            <div class="meter-track">
+              <div class="meter-fill-human" style="width: 86.7%;">
+                <span class="meter-pct">86.7%</span>
+              </div>
+              <div class="meter-fill-ai" style="width: 13.3%;">
+                <span class="meter-pct">13.3%</span>
+              </div>
+            </div>
+            <div class="meter-label ai">AI</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text">Average ratings (1–5)</div>
+          <div class="rating-comparison">
+            <div class="rating-card human">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">Human — Visual</div>
+              <div class="rating-score">4.3</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+            <div class="rating-card ai">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">AI — Visual</div>
+              <div class="rating-score">3.5</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+          </div>
+          <div class="rating-comparison" style="margin-top: 1rem;">
+            <div class="rating-card human">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">Human — Emotion</div>
+              <div class="rating-score">4.7</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+            <div class="rating-card ai">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">AI — Emotion</div>
+              <div class="rating-score">3.3</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text">Could they detect the AI?</div>
+          <div class="preference-meter">
+            <div class="meter-label" style="color: #81B29A;">Correct</div>
+            <div class="meter-track">
+              <div style="background: #81B29A; height: 100%; width: 86.7%; display: flex; align-items: center; justify-content: flex-end; padding-right: 0.5rem;">
+                <span class="meter-pct">86.7%</span>
+              </div>
+              <div style="background: #E07A5F; height: 100%; width: 13.3%; display: flex; align-items: center; padding-left: 0.5rem;">
+                <span class="meter-pct">13.3%</span>
+              </div>
+            </div>
+            <div class="meter-label" style="color: #E07A5F;">Wrong</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== GROUP 3 — Tech & Marketing ===== -->
+    <div class="survey-group reveal">
+      <div class="survey-group-header">
+        <h3>Group 3 — <span class="display-text">Tech & Marketing</span></h3>
+        <div class="group-meta">N = 7 respondents</div>
+      </div>
+      <div class="survey-group-body">
+
+        <div class="question-block">
+          <div class="question-text">Overall preference</div>
+          <div class="preference-meter">
+            <div class="meter-label human">Human</div>
+            <div class="meter-track">
+              <div class="meter-fill-human" style="width: 57.1%;">
+                <span class="meter-pct">57.1%</span>
+              </div>
+              <div class="meter-fill-ai" style="width: 42.9%;">
+                <span class="meter-pct">42.9%</span>
+              </div>
+            </div>
+            <div class="meter-label ai">AI</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text">Average ratings (1–5)</div>
+          <div class="rating-comparison">
+            <div class="rating-card human">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">Human — Visual</div>
+              <div class="rating-score">4.3</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+            <div class="rating-card ai">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">AI — Visual</div>
+              <div class="rating-score">3.6</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+          </div>
+          <div class="rating-comparison" style="margin-top: 1rem;">
+            <div class="rating-card human">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">Human — Brand</div>
+              <div class="rating-score">3.6</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+            <div class="rating-card ai">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">AI — Brand</div>
+              <div class="rating-score">4.3</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text">Could they detect the AI?</div>
+          <div class="preference-meter">
+            <div class="meter-label" style="color: #81B29A;">Correct</div>
+            <div class="meter-track">
+              <div style="background: #81B29A; height: 100%; width: 42.9%; display: flex; align-items: center; justify-content: flex-end; padding-right: 0.5rem;">
+                <span class="meter-pct">42.9%</span>
+              </div>
+              <div style="background: #E07A5F; height: 100%; width: 57.1%; display: flex; align-items: center; padding-left: 0.5rem;">
+                <span class="meter-pct">57.1%</span>
+              </div>
+            </div>
+            <div class="meter-label" style="color: #E07A5F;">Wrong</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== POST-REVEAL & EFFECTIVENESS ===== -->
+    <div class="survey-group reveal">
+      <div class="survey-group-header">
+        <h3>Post-Reveal <span class="display-text">Insights</span></h3>
+        <div class="group-meta">After participants learned which was AI</div>
+      </div>
+      <div class="survey-group-body">
+
+        <div class="question-block">
+          <div class="question-text">Did they change their mind after learning which was AI?</div>
+          <div class="preference-meter">
+            <div class="meter-label" style="color: #999; font-size: 0.5rem;">No change</div>
+            <div class="meter-track">
+              <div style="background: #999; height: 100%; width: 84.6%; display: flex; align-items: center; justify-content: flex-end; padding-right: 0.5rem;">
+                <span class="meter-pct">84.6%</span>
+              </div>
+              <div style="background: var(--human); height: 100%; width: 15.4%; display: flex; align-items: center; padding-left: 0.3rem;">
+                <span class="meter-pct" style="font-size: 0.5rem;">15.4%</span>
+              </div>
+            </div>
+            <div class="meter-label" style="color: var(--human); font-size: 0.5rem;">→ Human</div>
+          </div>
+          <div style="font-family: var(--mono); font-size: 0.5rem; opacity: 0.35; margin-top: 0.3rem;">4 of 26 switched to human after reveal · 0 switched to AI</div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text">How effective is each approach? (1–5 scale)</div>
+          <div class="rating-comparison">
+            <div class="rating-card human">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">Human Effectiveness</div>
+              <div class="rating-score">4.3</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+            <div class="rating-card ai">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">AI Effectiveness</div>
+              <div class="rating-score">3.3</div>
+              <div class="rating-out-of">/ 5</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text">Can AI replace human designers? (1 = No way, 5 = Absolutely)</div>
+          <div class="rating-comparison" style="grid-template-columns: 1fr;">
+            <div class="rating-card" style="border-color: rgba(0,0,0,0.12);">
+              <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-bottom: 0.5rem;">Average Score</div>
+              <div class="rating-score" style="color: #81B29A;">2.5</div>
+              <div class="rating-out-of">/ 5 — leaning towards "no"</div>
+            </div>
+          </div>
+          <div style="font-family: var(--mono); font-size: 0.5rem; opacity: 0.35; margin-top: 0.8rem;">Distribution: 6 scored 1 · 7 scored 2 · 8 scored 3 · 3 scored 4 · 2 scored 5</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Final Summary -->
+  <section class="section section-dark" style="padding: 6rem 2rem; text-align: center;">
+    <div class="reveal">
+      <div class="survey-summary" style="border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); max-width: 800px; margin: 0 auto;">
+        <div class="mono" style="opacity: 0.4; margin-bottom: 2rem;">Final Verdict</div>
+        <div class="summary-value" style="color: var(--human);">80.8%</div>
+        <p class="display-text" style="font-size: 1.5rem; opacity: 0.5;">
+          chose the human-designed brand
+        </p>
+        <div style="margin-top: 3rem; font-size: 0.85rem; line-height: 1.8; opacity: 0.5; max-width: 600px; margin-left: auto; margin-right: auto;">
+          The human design won on visual quality and emotional impact. AI scored competitively on brand coherence — but when it came to making people <em>feel</em> something, the gap was decisive: 4.5 vs 2.9 out of 5. Even those who couldn't detect the AI (31%) still preferred the human work.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker">
+    <div class="ticker-content">
+      SURVEY RESULTS — DATA DRIVEN — HUMAN PERCEPTION — DESIGN QUALITY — PREFERENCE — PROFESSIONAL — EMOTIONAL — SURVEY RESULTS — DATA DRIVEN — HUMAN PERCEPTION — DESIGN QUALITY — PREFERENCE — PROFESSIONAL — EMOTIONAL —
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-label">About</div>
+        <p>Bachelor thesis exploring human creativity vs artificial intelligence in brand design.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-label">Navigation</div>
+        <a href="../index.html" style="display:block;">Home</a>
+        <a href="briefing.html" style="display:block;">The Briefing</a>
+        <a href="process.html" style="display:block;">The Process</a>
+        <a href="results.html" style="display:block;">The Results</a>
+        <a href="survey.html" style="display:block;">Survey</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-label">Credits</div>
+        <p>Bachelor Thesis — 2026</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">© 2026 Ketevani Kushashvili</div>
+      <div class="footer-bottom-right"><a href="mailto:ketikushashvili@gmail.com" style="opacity:0.6;">ketikushashvili@gmail.com</a> · <a href="impressum.html" style="opacity:0.6;">Impressum</a></div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script>initHeroAnimation();</script>
+  <script>
+  // Rotary dial menu
+  (function() {
+    if (window.innerWidth > 768) return;
+    var overlay = document.getElementById('rotary-overlay');
+    var dialItems = document.getElementById('dial-items');
+    var hamburger = document.querySelector('.hamburger');
+    var items = document.querySelectorAll('.dial-item');
+    var dial = document.getElementById('rotary-dial');
+    if (!overlay || !dialItems || !hamburger || !dial) return;
+    var radius = dial.offsetWidth / 2;
+    var itemCount = items.length;
+    var angleSpread = 15;
+    var startAngle = -((itemCount - 1) * angleSpread) / 2;
+    var currentRotation = 0;
+    var isDragging = false;
+    var startY = 0;
+    var lastY = 0;
+    var velocity = 0;
+    function positionItems() {
+      radius = dial.offsetWidth / 2;
+      items.forEach(function(item, i) {
+        var angle = startAngle + (i * angleSpread);
+        var rad = angle * (Math.PI / 180);
+        var x = radius + Math.cos(rad) * radius;
+        var y = radius + Math.sin(rad) * radius;
+        item.style.left = x + 'px';
+        item.style.top = y + 'px';
+        item.style.transform = 'translate(0, -50%)';
+      });
+    }
+    hamburger.addEventListener('click', function() {
+      var isOpen = overlay.classList.toggle('open');
+      hamburger.classList.toggle('active');
+      document.querySelector('nav').classList.toggle('rotary-open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+      if (isOpen) { setTimeout(positionItems, 10); }
+    });
+    items.forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        // Keep overlay visible during navigation to prevent flash
+      });
+    });
+    function onStart(e) {
+      isDragging = true;
+      var touch = e.touches ? e.touches[0] : e;
+      startY = touch.clientY; lastY = startY; velocity = 0;
+      dialItems.style.transition = 'none';
+    }
+    function onMove(e) {
+      if (!isDragging) return;
+      var touch = e.touches ? e.touches[0] : e;
+      var deltaY = touch.clientY - lastY;
+      velocity = deltaY; lastY = touch.clientY;
+      currentRotation += deltaY * 0.3;
+      currentRotation = Math.max(-20, Math.min(20, currentRotation));
+      dialItems.style.transform = 'rotate(' + currentRotation + 'deg)';
+    }
+    function onEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      dialItems.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      var snapAngle = Math.round(currentRotation / angleSpread) * angleSpread;
+      snapAngle = Math.max(-20, Math.min(20, snapAngle));
+      currentRotation = snapAngle;
+      dialItems.style.transform = 'rotate(' + currentRotation + 'deg)';
+    }
+    overlay.addEventListener('touchstart', onStart, { passive: true });
+    overlay.addEventListener('touchmove', onMove, { passive: true });
+    overlay.addEventListener('touchend', onEnd);
+    overlay.addEventListener('mousedown', onStart);
+    overlay.addEventListener('mousemove', onMove);
+    overlay.addEventListener('mouseup', onEnd);
+    overlay.addEventListener('mouseleave', onEnd);
+    window.addEventListener('resize', function() { if (overlay.classList.contains('open')) positionItems(); });
+  })();
+  </script>
+</body>
+</html>

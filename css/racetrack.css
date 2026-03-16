@@ -1,0 +1,166 @@
+/* ============================================
+   RACE TRACK — Hero & Track Line CSS
+   Full SVG Hero Layout
+   ============================================ */
+
+/* --- Race Hero Container --- */
+.race-hero {
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  text-align: left;
+  padding-top: 60px;
+  background: #f5f4ef;
+  color: var(--text);
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- SVG Hero Wrapper --- */
+.hero-svg-wrapper {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+/* Show desktop header, hide mobile by default */
+.hero-svg-mobile {
+  display: none;
+}
+
+/* --- Scroll Indicator Bar --- */
+.scroll-indicator-bar {
+  padding: 3rem 0 2.5rem;
+  text-align: center;
+}
+
+.hero-scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--condensed);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  color: #161616;
+}
+
+.hero-scroll-indicator::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 36px;
+  background: #161616;
+  animation: scrollPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.2; transform: scaleY(0.5); }
+  50% { opacity: 0.6; transform: scaleY(1); }
+}
+
+/* --- Track Line Thread (continues below hero) --- */
+.track-line-thread {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.track-line-segment {
+  width: 1px;
+  height: 200px;
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0%,
+    rgba(17, 17, 17, 0.3) 30%,
+    rgba(17, 17, 17, 0.08) 70%,
+    transparent 100%
+  );
+}
+
+/* --- Section with Track Context --- */
+.section-with-track {
+  position: relative;
+}
+
+.section-with-track::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(17,17,17,0.06), transparent);
+  pointer-events: none;
+}
+
+/* --- CTA Links --- */
+.cta-link {
+  border: 1px solid var(--border);
+  padding: 1rem 2rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.cta-link:hover {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .hero.race-hero {
+    display: block !important;
+    min-height: 0 !important;
+    padding: 50px 0 0 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    align-items: unset !important;
+    justify-content: unset !important;
+  }
+
+  .hero.race-hero .hero-svg-wrapper {
+    width: 100vw !important;
+  }
+
+  .hero-svg-desktop {
+    display: none !important;
+  }
+
+  .hero-svg-mobile {
+    display: block !important;
+    width: 100vw !important;
+    height: auto !important;
+  }
+
+  .scroll-indicator-bar {
+    display: none;
+  }
+
+  .cta-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 0.8rem 1.5rem;
+  }
+}

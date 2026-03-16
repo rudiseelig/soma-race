@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1353.38 1000">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #231f20;
+      }
+
+      .cls-1, .cls-2 {
+        stroke: #231f20;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 3.69px;
+      }
+
+      .cls-2 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <path class="cls-2" d="M451.94,347.03h53.49c7.25,0,13.13,5.88,13.13,13.13v279.68c0,7.25-5.89,13.13-13.13,13.13h-53.49c-7.25,0-13.13-5.88-13.13-13.13v-279.68c0-7.25,5.88-13.13,13.13-13.13Z"/>
+  <circle class="cls-2" cx="478.69" cy="393.82" r="28.79"/>
+  <circle class="cls-2" cx="478.69" cy="465.21" r="28.79" transform="translate(-57.19 863.2) rotate(-80.78)"/>
+  <circle class="cls-1" cx="478.69" cy="536.59" r="28.79"/>
+  <circle class="cls-1" cx="478.69" cy="606.18" r="28.79" transform="translate(-195.54 229.33) rotate(-22.5)"/>
+  <path class="cls-2" d="M550.92,347.03h53.49c7.25,0,13.13,5.88,13.13,13.13v279.68c0,7.25-5.89,13.13-13.13,13.13h-53.49c-7.25,0-13.13-5.88-13.13-13.13v-279.68c0-7.25,5.88-13.13,13.13-13.13Z"/>
+  <circle class="cls-2" cx="577.66" cy="393.82" r="28.79"/>
+  <circle class="cls-2" cx="577.66" cy="465.21" r="28.79" transform="translate(-159.76 544.73) rotate(-45)"/>
+  <circle class="cls-1" cx="577.66" cy="536.59" r="28.79"/>
+  <circle class="cls-1" cx="577.66" cy="606.18" r="28.79" transform="translate(-145.02 1029.12) rotate(-76.72)"/>
+  <path class="cls-2" d="M649.89,347.03h53.49c7.25,0,13.13,5.88,13.13,13.13v279.68c0,7.25-5.89,13.13-13.13,13.13h-53.49c-7.25,0-13.13-5.88-13.13-13.13v-279.68c0-7.25,5.88-13.13,13.13-13.13Z"/>
+  <circle class="cls-2" cx="676.64" cy="393.82" r="28.79"/>
+  <circle class="cls-2" cx="676.64" cy="465.21" r="28.79" transform="translate(68.42 1016.86) rotate(-76.72)"/>
+  <circle class="cls-1" cx="676.64" cy="536.59" r="28.79"/>
+  <circle class="cls-1" cx="676.64" cy="606.18" r="28.79" transform="translate(-230.45 656) rotate(-45)"/>
+  <path class="cls-2" d="M748.87,347.03h53.49c7.25,0,13.13,5.88,13.13,13.13v279.68c0,7.25-5.89,13.13-13.13,13.13h-53.49c-7.25,0-13.13-5.88-13.13-13.13v-279.68c0-7.25,5.88-13.13,13.13-13.13Z"/>
+  <circle class="cls-2" cx="775.61" cy="393.82" r="28.79"/>
+  <circle class="cls-2" cx="775.61" cy="465.21" r="28.79" transform="translate(192.17 1156.28) rotate(-80.78)"/>
+  <circle class="cls-1" cx="775.61" cy="536.59" r="28.79"/>
+  <circle class="cls-1" cx="775.61" cy="606.18" r="28.79" transform="translate(-172.93 342.96) rotate(-22.5)"/>
+  <path class="cls-2" d="M847.95,347.03h53.49c7.25,0,13.13,5.88,13.13,13.13v279.68c0,7.25-5.89,13.13-13.13,13.13h-53.49c-7.25,0-13.13-5.88-13.13-13.13v-279.68c0-7.25,5.88-13.13,13.13-13.13Z"/>
+  <circle class="cls-2" cx="874.69" cy="393.82" r="28.79"/>
+  <circle class="cls-2" cx="874.69" cy="465.21" r="28.79" transform="translate(220.97 1209.62) rotate(-76.72)"/>
+  <circle class="cls-1" cx="874.69" cy="536.59" r="28.79"/>
+  <circle class="cls-1" cx="874.69" cy="606.18" r="28.79" transform="translate(-172.44 796.04) rotate(-45)"/>
+  <rect class="cls-2" x="518.57" y="484.62" width="19.22" height="30.76"/>
+  <rect class="cls-2" x="617.54" y="484.62" width="19.22" height="30.76"/>
+  <rect class="cls-2" x="716.52" y="484.62" width="19.22" height="30.76"/>
+  <rect class="cls-2" x="815.49" y="484.62" width="19.22" height="30.76"/>
+</svg>

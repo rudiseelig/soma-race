@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Results — SOMA Race</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Catamaran:wght@100;200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .result-showcase {
+      margin-bottom: 6rem;
+    }
+
+    .result-showcase .showcase-label {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 2rem;
+      opacity: 0.4;
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+    }
+
+    .showcase-panel {
+      padding: 3rem;
+      position: relative;
+    }
+
+    .showcase-panel:first-child {
+      border-right: 1px solid var(--border);
+    }
+
+    .showcase-panel .designer-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid;
+      margin-bottom: 2rem;
+    }
+
+    .showcase-panel.human .designer-tag {
+      color: var(--human);
+      border-color: var(--human);
+    }
+
+    .showcase-panel.ai .designer-tag {
+      color: var(--ai);
+      border-color: var(--ai);
+    }
+
+    .showcase-panel .showcase-img {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .showcase-panel .showcase-img img,
+    .showcase-panel .showcase-img svg {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      cursor: zoom-in;
+      transition: opacity 0.2s ease;
+    }
+
+    .showcase-panel .showcase-img img:hover {
+      opacity: 0.85;
+    }
+
+    /* Lightbox */
+    .lightbox-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.92);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+      cursor: zoom-out;
+    }
+
+    .lightbox-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-overlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      transform: scale(0.92);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .lightbox-overlay.active img {
+      transform: scale(1);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+      z-index: 10001;
+    }
+
+    .lightbox-close:hover {
+      border-color: var(--human);
+    }
+
+    .lightbox-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .showcase-details {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      opacity: 0.6;
+    }
+
+    .deliverable-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      display: inline-block;
+      margin-bottom: 2rem;
+      background: rgba(255,255,255,0.3);
+    }
+
+    @media (max-width: 768px) {
+      .showcase-grid {
+        grid-template-columns: 1fr;
+      }
+      .showcase-panel:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .showcase-panel {
+        padding: 2rem 1.5rem;
+      }
+      .result-showcase {
+        margin-bottom: 4rem;
+      }
+      .deliverable-label {
+        font-size: 0.6rem;
+        padding: 0.4rem 0.8rem;
+      }
+      .showcase-details {
+        font-size: 0.8rem;
+      }
+      .lightbox-close {
+        top: 1rem;
+        right: 1rem;
+        width: 36px;
+        height: 36px;
+      }
+      .lightbox-overlay img {
+        max-width: 95vw;
+        max-height: 85vh;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .showcase-panel {
+        padding: 1.5rem 1rem;
+      }
+      .showcase-panel .showcase-img img {
+        padding: 0 !important;
+      }
+      .showcase-panel .designer-tag {
+        font-size: 0.5rem;
+        padding: 0.2rem 0.6rem;
+        margin-bottom: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor-follower"></div>
+
+  <nav>
+    <a href="../index.html" class="logo"></a>
+    <ul class="nav-links">
+      <li><a href="../index.html" data-num="00">Home</a></li>
+      <li><a href="briefing.html" data-num="01">The Briefing</a></li>
+      <li><a href="process.html" data-num="02">The Process</a></li>
+      <li><a href="results.html" class="active" data-num="03">The Results</a></li>
+      <li><a href="survey.html" data-num="04">Survey</a></li>
+    </ul>
+    <div class="nav-counter mono">04/05</div>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <!-- Rotary Dial Menu (mobile) -->
+  <div class="rotary-overlay" id="rotary-overlay">
+    <div class="rotary-dial" id="rotary-dial">
+      <div class="arc-circle"></div>
+      <div class="dial-items" id="dial-items">
+        <a href="../index.html" class="dial-item" data-index="0">
+          <span class="dial-dot"></span>
+          <span class="dial-num">00</span>
+          <span class="dial-label">Home</span>
+        </a>
+        <a href="briefing.html" class="dial-item" data-index="1">
+          <span class="dial-dot"></span>
+          <span class="dial-num">01</span>
+          <span class="dial-label">The Briefing</span>
+        </a>
+        <a href="process.html" class="dial-item" data-index="2">
+          <span class="dial-dot"></span>
+          <span class="dial-num">02</span>
+          <span class="dial-label">The Process</span>
+        </a>
+        <a href="results.html" class="dial-item active" data-index="3">
+          <span class="dial-dot"></span>
+          <span class="dial-num">03</span>
+          <span class="dial-label">The Results</span>
+        </a>
+        <a href="survey.html" class="dial-item" data-index="4">
+          <span class="dial-dot"></span>
+          <span class="dial-num">04</span>
+          <span class="dial-label">Survey</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero section-dark" style="height: 60vh;">
+    <div class="micro-elements" data-count="12"></div>
+    <div class="corner-mark tl">004 / 005</div>
+    <div class="corner-mark tr">FINAL OUTPUT</div>
+
+    <h1 class="hero-title" style="font-size: clamp(2.5rem, 8vw, 7rem);">
+      The<br><span class="display-text">Results</span>
+    </h1>
+    <p class="hero-subtitle">Two complete brand identities — compared</p>
+  </section>
+
+  <!-- Results -->
+  <section class="section">
+    <div class="section-header reveal">
+      <div class="section-label">004 — Final Deliverables</div>
+      <h2 class="section-title">The <span class="display-text">outcomes</span></h2>
+    </div>
+
+    <!-- Logo Comparison -->
+    <div class="result-showcase reveal">
+      <div class="deliverable-label">01 — Logo Concept</div>
+      <div class="showcase-grid">
+        <div class="showcase-panel human">
+          <div class="designer-tag">Human</div>
+          <div class="showcase-img">
+            <img src="../assets/img/Logo Human.svg" alt="Human-designed SOMA logo" style="width: 100%; height: auto; padding: 2rem;">
+          </div>
+          <p class="showcase-details">
+            Hand-painted letters traced with honey, photographed, scanned, and manually vectorized in Illustrator. The logo carries the imperfections of something literally made by hand.
+          </p>
+        </div>
+        <div class="showcase-panel ai">
+          <div class="designer-tag">AI</div>
+          <div class="showcase-img">
+            <img src="../assets/img/Logo AI.svg" alt="AI-generated SOMA logo" style="width: 100%; height: auto; padding: 2rem;">
+          </div>
+          <p class="showcase-details">
+            AI-generated wordmark with a drop symbol featuring a curved S interior line — referencing oil and the brand name. Vectorized manually in Figma from raster output.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Identity Comparison -->
+    <div class="result-showcase reveal">
+      <div class="deliverable-label">02 — Visual Identity</div>
+      <div class="showcase-grid">
+        <div class="showcase-panel human">
+          <div class="designer-tag">Human</div>
+          <div class="showcase-img">
+            <img src="../assets/img/Human Visual Identity.jpg" alt="Human visual identity for SOMA" style="width: 100%; height: auto;">
+          </div>
+          <p class="showcase-details">
+            Earth tones grounded in real-world lighting tests. Hand-crafted typography with honey-traced lettering. A tactile, organic identity built through physical experimentation.
+          </p>
+        </div>
+        <div class="showcase-panel ai">
+          <div class="designer-tag">AI</div>
+          <div class="showcase-img">
+            <img src="../assets/img/AI Visual Identity.jpg" alt="AI visual identity for SOMA" style="width: 100%; height: auto;">
+          </div>
+          <p class="showcase-details">
+            Moodboard-derived palette with Canela serif typography. A polished, cohesive identity assembled in minutes from AI-generated references and color extraction.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Packaging Comparison -->
+    <div class="result-showcase reveal">
+      <div class="deliverable-label">03 — Packaging</div>
+      <div class="showcase-grid">
+        <div class="showcase-panel human">
+          <div class="designer-tag">Human</div>
+          <div class="showcase-img">
+            <img src="../assets/img/Human Packaging.jpg" alt="Human-designed SOMA packaging" style="width: 100%; height: auto;">
+          </div>
+          <p class="showcase-details">
+            Photographed with two cameras and a mini light box. Composited in Photoshop to resolve physical constraints. Retouched and supplemented with human-made stock for tonal consistency.
+          </p>
+        </div>
+        <div class="showcase-panel ai">
+          <div class="designer-tag">AI</div>
+          <div class="showcase-img">
+            <img src="../assets/img/AI Packaging.jpg" alt="AI-generated SOMA packaging" style="width: 100%; height: auto;">
+          </div>
+          <p class="showcase-details">
+            The strongest AI deliverables. Classic brown pipette bottles with an apothecary feel. Labels with readable text, serial numbers, QR codes, and ingredient lists.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Moodboard Comparison -->
+    <div class="result-showcase reveal">
+      <div class="deliverable-label">04 — Moodboard</div>
+      <div class="showcase-grid">
+        <div class="showcase-panel human">
+          <div class="designer-tag">Human</div>
+          <div class="showcase-img">
+            <img src="../assets/img/Human moodboard.jpg" alt="Human moodboard for SOMA" style="width: 100%; height: auto;">
+          </div>
+        </div>
+        <div class="showcase-panel ai">
+          <div class="designer-tag">AI</div>
+          <div class="showcase-img">
+            <img src="../assets/img/AI Moodboard.jpg" alt="AI moodboard for SOMA" style="width: 100%; height: auto;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messaging Comparison -->
+    <div class="result-showcase reveal">
+      <div class="deliverable-label">05 — Brand Messaging</div>
+      <div class="showcase-grid">
+        <div class="showcase-panel human" style="min-height: 200px;">
+          <div class="designer-tag">Human</div>
+          <blockquote style="font-family: var(--display); font-size: 1.5rem; font-style: italic; line-height: 1.4; opacity: 0.7; margin: 1rem 0;">
+            "Sensual | Intimate | Emotional"
+          </blockquote>
+          <p class="showcase-details">Harnessing the quiet power of nature, we've created a sensuous oil that melts into the skin, nourishing you from the outside in. Our science-backed blends use organic botanicals to help you feel more present in your body, enhancing every moment of intimacy and touch.</p>
+        </div>
+        <div class="showcase-panel ai" style="min-height: 200px;">
+          <div class="designer-tag">AI</div>
+          <blockquote style="font-family: var(--display); font-size: 1.5rem; font-style: italic; line-height: 1.4; opacity: 0.7; margin: 1rem 0;">
+            "Sensuality, simplified."
+          </blockquote>
+          <p class="showcase-details">SOMA is a botanical ritual designed to slow the moment and reconnect body and mind. Crafted from nourishing plant oils and warm aromatic notes, the formula transforms everyday touch into an intimate sensory experience. The minimalist composition, soft textures, and earthy tones reflect a philosophy of quiet luxury — where intimacy is natural, unhurried, and deeply personal.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="text-align: center; padding: 6rem 2rem;">
+    <div class="reveal">
+      <p class="display-text" style="font-size: clamp(1.5rem, 3vw, 2.5rem); max-width: 600px; margin: 0 auto 2rem; opacity: 0.6;">
+        Now see what people thought.
+      </p>
+      <a href="survey.html" style="border: 1px solid var(--border); padding: 1rem 2.5rem; font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; display: inline-block;">
+        View survey results →
+      </a>
+    </div>
+  </section>
+
+  <div class="ticker">
+    <div class="ticker-content">
+      LOGO — IDENTITY — PACKAGING — MOODBOARD — MESSAGING — HUMAN — AI — COMPARISON — LOGO — IDENTITY — PACKAGING — MOODBOARD — MESSAGING — HUMAN — AI — COMPARISON —
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-label">About</div>
+        <p>Bachelor thesis exploring human creativity vs artificial intelligence in brand design.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-label">Navigation</div>
+        <a href="../index.html" style="display:block;">Home</a>
+        <a href="briefing.html" style="display:block;">The Briefing</a>
+        <a href="process.html" style="display:block;">The Process</a>
+        <a href="results.html" style="display:block;">The Results</a>
+        <a href="survey.html" style="display:block;">Survey</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-label">Credits</div>
+        <p>Bachelor Thesis — 2026</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">© 2026 Ketevani Kushashvili</div>
+      <div class="footer-bottom-right"><a href="mailto:ketikushashvili@gmail.com" style="opacity:0.6;">ketikushashvili@gmail.com</a> · <a href="impressum.html" style="opacity:0.6;">Impressum</a></div>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox">
+    <button class="lightbox-close">&times;</button>
+    <img src="" alt="Zoomed view" id="lightbox-img">
+    <div class="lightbox-hint">Click anywhere to close</div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script>initHeroAnimation();</script>
+  <script>
+    // Lightbox zoom
+    (function() {
+      var overlay = document.getElementById('lightbox');
+      var lbImg = document.getElementById('lightbox-img');
+      var closeBtn = overlay.querySelector('.lightbox-close');
+
+      // Click any showcase image to open lightbox
+      document.querySelectorAll('.showcase-img img').forEach(function(img) {
+        img.addEventListener('click', function() {
+          lbImg.src = this.src;
+          lbImg.alt = this.alt;
+          overlay.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        });
+      });
+
+      function closeLightbox() {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      overlay.addEventListener('click', closeLightbox);
+      closeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeLightbox();
+      });
+
+      // Prevent clicking the image itself from closing (so they can inspect it)
+      lbImg.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+
+      // ESC key to close
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeLightbox();
+      });
+    })();
+  </script>
+  <script>
+  // Rotary dial menu
+  (function() {
+    if (window.innerWidth > 768) return;
+    var overlay = document.getElementById('rotary-overlay');
+    var dialItems = document.getElementById('dial-items');
+    var hamburger = document.querySelector('.hamburger');
+    var items = document.querySelectorAll('.dial-item');
+    var dial = document.getElementById('rotary-dial');
+    if (!overlay || !dialItems || !hamburger || !dial) return;
+    var radius = dial.offsetWidth / 2;
+    var itemCount = items.length;
+    var angleSpread = 15;
+    var startAngle = -((itemCount - 1) * angleSpread) / 2;
+    var currentRotation = 0;
+    var isDragging = false;
+    var startY = 0;
+    var lastY = 0;
+    var velocity = 0;
+    function positionItems() {
+      radius = dial.offsetWidth / 2;
+      items.forEach(function(item, i) {
+        var angle = startAngle + (i * angleSpread);
+        var rad = angle * (Math.PI / 180);
+        var x = radius + Math.cos(rad) * radius;
+        var y = radius + Math.sin(rad) * radius;
+        item.style.left = x + 'px';
+        item.style.top = y + 'px';
+        item.style.transform = 'translate(0, -50%)';
+      });
+    }
+    hamburger.addEventListener('click', function() {
+      var isOpen = overlay.classList.toggle('open');
+      hamburger.classList.toggle('active');
+      document.querySelector('nav').classList.toggle('rotary-open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+      if (isOpen) { setTimeout(positionItems, 10); }
+    });
+    items.forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        // Keep overlay visible during navigation to prevent flash
+      });
+    });
+    function onStart(e) {
+      isDragging = true;
+      var touch = e.touches ? e.touches[0] : e;
+      startY = touch.clientY; lastY = startY; velocity = 0;
+      dialItems.style.transition = 'none';
+    }
+    function onMove(e) {
+      if (!isDragging) return;
+      var touch = e.touches ? e.touches[0] : e;
+      var deltaY = touch.clientY - lastY;
+      velocity = deltaY; lastY = touch.clientY;
+      currentRotation += deltaY * 0.3;
+      currentRotation = Math.max(-20, Math.min(20, currentRotation));
+      dialItems.style.transform = 'rotate(' + currentRotation + 'deg)';
+    }
+    function onEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      dialItems.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      var snapAngle = Math.round(currentRotation / angleSpread) * angleSpread;
+      snapAngle = Math.max(-20, Math.min(20, snapAngle));
+      currentRotation = snapAngle;
+      dialItems.style.transform = 'rotate(' + currentRotation + 'deg)';
+    }
+    overlay.addEventListener('touchstart', onStart, { passive: true });
+    overlay.addEventListener('touchmove', onMove, { passive: true });
+    overlay.addEventListener('touchend', onEnd);
+    overlay.addEventListener('mousedown', onStart);
+    overlay.addEventListener('mousemove', onMove);
+    overlay.addEventListener('mouseup', onEnd);
+    overlay.addEventListener('mouseleave', onEnd);
+    window.addEventListener('resize', function() { if (overlay.classList.contains('open')) positionItems(); });
+  })();
+  </script>
+</body>
+</html>

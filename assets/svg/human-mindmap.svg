@@ -1,0 +1,195 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" font-family="'Catamaran', 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <style>
+      .node-main { fill: #161616; }
+      .node-stage { fill: #ff3d00; }
+      .node-detail { fill: #f5f4ef; stroke: #161616; stroke-width: 1.5; }
+      .node-insight { fill: #3afb04; }
+      .text-main { fill: #f5f4ef; font-size: 18px; font-weight: 700; text-anchor: middle; text-transform: uppercase; letter-spacing: 2px; }
+      .text-stage { fill: #fff; font-size: 11px; font-weight: 700; text-anchor: middle; text-transform: uppercase; letter-spacing: 1px; }
+      .text-detail { fill: #161616; font-size: 9px; font-weight: 500; text-anchor: middle; }
+      .text-insight { fill: #161616; font-size: 9px; font-weight: 700; text-anchor: middle; }
+      .text-time { fill: #ff3d00; font-size: 8px; font-weight: 600; text-anchor: middle; }
+      .line-main { stroke: #161616; stroke-width: 2; fill: none; }
+      .line-branch { stroke: #161616; stroke-width: 1; fill: none; opacity: 0.4; }
+      .line-accent { stroke: #ff3d00; stroke-width: 1.5; fill: none; stroke-dasharray: 4 3; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="900" fill="#f5f4ef"/>
+
+  <!-- Title -->
+  <text x="700" y="40" font-size="24" font-weight="800" text-anchor="middle" fill="#161616" letter-spacing="6" text-transform="uppercase">HUMAN DESIGN PROCESS</text>
+  <text x="700" y="58" font-size="10" font-weight="500" text-anchor="middle" fill="#ff3d00" letter-spacing="3">SOMA BRANDING — TRACK A — 33-38 HOURS ACROSS 2 MONTHS</text>
+  <line x1="580" y1="66" x2="820" y2="66" stroke="#161616" stroke-width="1"/>
+
+  <!-- CENTER NODE -->
+  <circle cx="700" cy="160" r="45" class="node-main"/>
+  <text x="700" y="155" class="text-main" font-size="13">HUMAN</text>
+  <text x="700" y="172" class="text-main" font-size="13">DESIGNER</text>
+
+  <!-- ========== STAGE 1: PRODUCT SOURCING ========== -->
+  <line x1="700" y1="205" x2="180" y2="280" class="line-main"/>
+  <rect x="100" y="260" width="160" height="40" rx="4" class="node-stage"/>
+  <text x="180" y="278" class="text-stage">1. PRODUCT SOURCING</text>
+  <text x="180" y="292" class="text-time" fill="#fff" font-size="8">4–5 HOURS</text>
+
+  <!-- Details -->
+  <line x1="180" y1="300" x2="80" y2="340" class="line-branch"/>
+  <rect x="20" y="330" width="120" height="28" rx="3" class="node-detail"/>
+  <text x="80" y="347" class="text-detail">Physical bottle needed</text>
+
+  <line x1="180" y1="300" x2="180" y2="345" class="line-branch"/>
+  <rect x="120" y="335" width="120" height="28" rx="3" class="node-detail"/>
+  <text x="180" y="347" class="text-detail">China supplier (1 unit)</text>
+  <text x="180" y="358" class="text-detail">2-week wait</text>
+
+  <line x1="180" y1="300" x2="280" y2="340" class="line-branch"/>
+  <rect x="218" y="330" width="124" height="28" rx="3" class="node-detail"/>
+  <text x="280" y="347" class="text-detail">MOQ obstacle (50+)</text>
+
+  <!-- ========== STAGE 2: VISUAL RESEARCH ========== -->
+  <line x1="700" y1="205" x2="400" y2="260" class="line-main"/>
+  <rect x="310" y="240" width="180" height="40" rx="4" class="node-stage"/>
+  <text x="400" y="258" class="text-stage">2. VISUAL RESEARCH</text>
+  <text x="400" y="272" class="text-time" fill="#fff" font-size="8">8–9 HOURS</text>
+
+  <!-- Details -->
+  <line x1="400" y1="280" x2="340" y2="320" class="line-branch"/>
+  <rect x="268" y="310" width="144" height="28" rx="3" class="node-detail"/>
+  <text x="340" y="322" class="text-detail">Reference library building</text>
+  <text x="340" y="333" class="text-detail">What NOT to look like</text>
+
+  <line x1="400" y1="280" x2="460" y2="320" class="line-branch"/>
+  <rect x="390" y="310" width="140" height="28" rx="3" class="node-detail"/>
+  <text x="460" y="322" class="text-detail">No florals / clinical /</text>
+  <text x="460" y="333" class="text-detail">erotic — hard to navigate</text>
+
+  <!-- ========== STAGE 3: COLOR PALETTE ========== -->
+  <line x1="700" y1="205" x2="620" y2="260" class="line-main"/>
+  <rect x="530" y="245" width="180" height="40" rx="4" class="node-stage"/>
+  <text x="620" y="263" class="text-stage">3. COLOR PALETTE</text>
+  <text x="620" y="277" class="text-time" fill="#fff" font-size="8">2 HOURS</text>
+
+  <!-- Details -->
+  <line x1="620" y1="285" x2="560" y2="325" class="line-branch"/>
+  <rect x="490" y="315" width="140" height="28" rx="3" class="node-detail"/>
+  <text x="560" y="327" class="text-detail">Sunset lamp testing</text>
+  <text x="560" y="338" class="text-detail">Physical light, not screen</text>
+
+  <line x1="620" y1="285" x2="680" y2="325" class="line-branch"/>
+  <rect x="615" y="315" width="130" height="28" rx="3" class="node-detail"/>
+  <text x="680" y="327" class="text-detail">Earth tones + warmth</text>
+  <text x="680" y="338" class="text-detail">Grounded in real light</text>
+
+  <!-- ========== STAGE 4: LOGO ========== -->
+  <line x1="700" y1="205" x2="850" y2="260" class="line-main"/>
+  <rect x="770" y="245" width="160" height="40" rx="4" class="node-stage"/>
+  <text x="850" y="263" class="text-stage">4. LOGO DESIGN</text>
+  <text x="850" y="277" class="text-time" fill="#fff" font-size="8">~1 WEEK</text>
+
+  <!-- Details -->
+  <line x1="850" y1="285" x2="780" y2="330" class="line-branch"/>
+  <rect x="710" y="320" width="140" height="28" rx="3" class="node-detail"/>
+  <text x="780" y="332" class="text-detail">Multiple dead ends</text>
+  <text x="780" y="343" class="text-detail">Typographic approaches</text>
+
+  <!-- HONEY NODE - special highlight -->
+  <line x1="850" y1="285" x2="850" y2="330" class="line-accent"/>
+  <rect x="785" y="355" width="130" height="38" rx="4" class="node-insight"/>
+  <text x="850" y="370" class="text-insight">HONEY BREAKTHROUGH</text>
+  <text x="850" y="382" class="text-detail">Hand-painted → photo →</text>
+  <text x="850" y="392" class="text-detail">scan → vectorize</text>
+
+  <line x1="850" y1="285" x2="950" y2="330" class="line-branch"/>
+  <rect x="890" y="320" width="130" height="28" rx="3" class="node-detail"/>
+  <text x="955" y="332" class="text-detail">Adobe Illustrator</text>
+  <text x="955" y="343" class="text-detail">Manual vectorization</text>
+
+  <!-- ========== STAGE 5: PHOTOGRAPHY ========== -->
+  <line x1="700" y1="205" x2="1080" y2="280" class="line-main"/>
+  <rect x="990" y="260" width="180" height="40" rx="4" class="node-stage"/>
+  <text x="1080" y="278" class="text-stage">5. PHOTOGRAPHY</text>
+  <text x="1080" y="292" class="text-time" fill="#fff" font-size="8">4H SHOOT + 4-5H EDIT</text>
+
+  <!-- Details -->
+  <line x1="1080" y1="300" x2="1010" y2="340" class="line-branch"/>
+  <rect x="940" y="330" width="140" height="28" rx="3" class="node-detail"/>
+  <text x="1010" y="342" class="text-detail">2 cameras + light box</text>
+  <text x="1010" y="353" class="text-detail">+ sunset lamp</text>
+
+  <line x1="1080" y1="300" x2="1080" y2="345" class="line-branch"/>
+  <rect x="1015" y="335" width="130" height="28" rx="3" class="node-detail"/>
+  <text x="1080" y="347" class="text-detail">Pipette compositing</text>
+  <text x="1080" y="358" class="text-detail">in Photoshop</text>
+
+  <line x1="1080" y1="300" x2="1180" y2="340" class="line-branch"/>
+  <rect x="1115" y="330" width="130" height="28" rx="3" class="node-detail"/>
+  <text x="1180" y="342" class="text-detail">Cosmos stock photos</text>
+  <text x="1180" y="353" class="text-detail">Tonal consistency</text>
+
+  <!-- ========== STAGE 6: COPYWRITING ========== -->
+  <line x1="700" y1="205" x2="1220" y2="200" class="line-main"/>
+  <rect x="1180" y="175" width="180" height="40" rx="4" class="node-stage"/>
+  <text x="1270" y="193" class="text-stage">6. COPYWRITING</text>
+  <text x="1270" y="207" class="text-time" fill="#fff" font-size="8">5–6 HOURS</text>
+
+  <!-- Details -->
+  <line x1="1270" y1="215" x2="1220" y2="248" class="line-branch"/>
+  <rect x="1155" y="238" width="130" height="28" rx="3" class="node-detail"/>
+  <text x="1220" y="250" class="text-detail">Second language</text>
+  <text x="1220" y="261" class="text-detail">challenge (English)</text>
+
+  <line x1="1270" y1="215" x2="1340" y2="248" class="line-branch"/>
+  <rect x="1275" y="238" width="130" height="28" rx="3" class="node-detail"/>
+  <text x="1340" y="250" class="text-detail">Friends, colleagues,</text>
+  <text x="1340" y="261" class="text-detail">professor feedback</text>
+
+  <!-- ========== STAGE 7: WEBSITE ========== -->
+  <line x1="700" y1="205" x2="1250" y2="140" class="line-main"/>
+  <rect x="1180" y="115" width="160" height="40" rx="4" class="node-stage"/>
+  <text x="1260" y="133" class="text-stage">7. WEBSITE PROTOTYPE</text>
+  <text x="1260" y="147" class="text-time" fill="#fff" font-size="8">2–3 HOURS</text>
+
+  <!-- ========== STAGE 8: BRAND BOOK ========== -->
+  <line x1="700" y1="160" x2="1100" y2="110" class="line-main"/>
+  <rect x="1020" y="90" width="160" height="40" rx="4" class="node-stage"/>
+  <text x="1100" y="108" class="text-stage">8. BRAND BOOK</text>
+  <text x="1100" y="122" class="text-time" fill="#fff" font-size="8">5 HOURS</text>
+
+  <!-- ========== BOTTOM: KEY INSIGHTS ========== -->
+  <line x1="200" y1="430" x2="1200" y2="430" stroke="#161616" stroke-width="0.5"/>
+  <text x="700" y="460" font-size="12" font-weight="700" text-anchor="middle" fill="#161616" letter-spacing="4">KEY QUALITIES OF HUMAN PROCESS</text>
+
+  <!-- Insight boxes -->
+  <rect x="60" y="480" width="220" height="70" rx="4" fill="#161616"/>
+  <text x="170" y="505" font-size="10" font-weight="700" text-anchor="middle" fill="#3afb04" letter-spacing="1">DIFFUSE THINKING</text>
+  <text x="170" y="520" font-size="9" text-anchor="middle" fill="#f5f4ef">2 months of subconscious</text>
+  <text x="170" y="533" font-size="9" text-anchor="middle" fill="#f5f4ef">processing — shower, commutes</text>
+
+  <rect x="310" y="480" width="220" height="70" rx="4" fill="#161616"/>
+  <text x="420" y="505" font-size="10" font-weight="700" text-anchor="middle" fill="#3afb04" letter-spacing="1">PHYSICAL MATERIALS</text>
+  <text x="420" y="520" font-size="9" text-anchor="middle" fill="#f5f4ef">Honey, sunset lamps, real</text>
+  <text x="420" y="533" font-size="9" text-anchor="middle" fill="#f5f4ef">bottles, cameras, olive oil</text>
+
+  <rect x="560" y="480" width="220" height="70" rx="4" fill="#161616"/>
+  <text x="670" y="505" font-size="10" font-weight="700" text-anchor="middle" fill="#3afb04" letter-spacing="1">HUMAN FEEDBACK LOOPS</text>
+  <text x="670" y="520" font-size="9" text-anchor="middle" fill="#f5f4ef">Friends, colleagues, professor</text>
+  <text x="670" y="533" font-size="9" text-anchor="middle" fill="#f5f4ef">Ongoing informal input</text>
+
+  <rect x="810" y="480" width="220" height="70" rx="4" fill="#161616"/>
+  <text x="920" y="505" font-size="10" font-weight="700" text-anchor="middle" fill="#3afb04" letter-spacing="1">HAPPY ACCIDENTS</text>
+  <text x="920" y="520" font-size="9" text-anchor="middle" fill="#f5f4ef">Logo from frustration</text>
+  <text x="920" y="533" font-size="9" text-anchor="middle" fill="#f5f4ef">Honey emerged unplanned</text>
+
+  <rect x="1060" y="480" width="220" height="70" rx="4" fill="#161616"/>
+  <text x="1170" y="505" font-size="10" font-weight="700" text-anchor="middle" fill="#ff3d00" letter-spacing="1">EMOTIONAL NAVIGATION</text>
+  <text x="1170" y="520" font-size="9" text-anchor="middle" fill="#f5f4ef">Second language sensitivity</text>
+  <text x="1170" y="533" font-size="9" text-anchor="middle" fill="#f5f4ef">Cultural + tonal intuition</text>
+
+  <!-- Resources footer -->
+  <line x1="200" y1="580" x2="1200" y2="580" stroke="#161616" stroke-width="0.5"/>
+  <text x="700" y="608" font-size="10" font-weight="600" text-anchor="middle" fill="#161616" letter-spacing="3">RESOURCES: 2 CAMERAS · LIGHT BOX · SUNSET LAMP · STICKER PAPER · OLIVE OIL · HONEY · ADOBE CC · FIGMA · COSMOS</text>
+  <text x="700" y="628" font-size="10" font-weight="600" text-anchor="middle" fill="#ff3d00" letter-spacing="3">33–38 ACTIVE HOURS · 2 MONTHS ELAPSED · 1 PACKAGE FROM CHINA</text>
+</svg>
