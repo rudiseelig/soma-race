@@ -409,3 +409,5 @@ function createSVGPlaceholder(text = 'SVG') {
     </svg>
   `;
 }
+
+window.initHeroAnimation = initHeroAnimation;
