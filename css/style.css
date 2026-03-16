@@ -38,6 +38,10 @@ html {
   overflow-x: hidden;
 }
 
+html {
+  background: #1a1a1a;
+}
+
 @keyframes pageEnter {
   from { opacity: 0; }
   to   { opacity: 1; }
