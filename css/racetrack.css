@@ -130,27 +130,7 @@
 /* --- Responsive --- */
 @media (max-width: 768px) {
   .hero.race-hero {
-    display: block !important;
-    min-height: 0 !important;
-    padding: 50px 0 0 0 !important;
-    margin: 0 !important;
-    overflow: hidden !important;
-    align-items: unset !important;
-    justify-content: unset !important;
-  }
-
-  .hero.race-hero .hero-svg-wrapper {
-    width: 100vw !important;
-  }
-
-  .hero-svg-desktop {
     display: none !important;
-  }
-
-  .hero-svg-mobile {
-    display: block !important;
-    width: 100vw !important;
-    height: auto !important;
   }
 
   .scroll-indicator-bar {
