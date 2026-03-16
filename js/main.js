@@ -319,22 +319,15 @@ function initTicker() {
 
 /* --- Page Transitions --- */
 function initPageTransitions() {
-  // Simple fade transition between pages
-  document.body.style.opacity = '0';
-  gsap.to(document.body, {
-    opacity: 1,
-    duration: 0.6,
-    ease: 'power2.out'
-  });
-
   document.querySelectorAll('a[href]').forEach(link => {
     const href = link.getAttribute('href');
     if (href && href.endsWith('.html') && !href.startsWith('http')) {
       link.addEventListener('click', (e) => {
         e.preventDefault();
+        document.body.style.animation = 'none';
         gsap.to(document.body, {
           opacity: 0,
-          duration: 0.3,
+          duration: 0.25,
           ease: 'power2.in',
           onComplete: () => {
             window.location.href = href;
