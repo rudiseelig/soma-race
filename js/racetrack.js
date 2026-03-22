@@ -37,17 +37,6 @@
       '-=0.3'
     );
 
-    // Parallax on scroll
-    gsap.to('.hero-svg', {
-      y: -40,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '.race-hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 1
-      }
-    });
   }
 
   /* --- Track line continuation through sections --- */
