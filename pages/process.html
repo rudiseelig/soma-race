@@ -994,10 +994,12 @@
         // Open content area
         contentArea.classList.add('open');
 
-        // Smooth scroll to content area
+        // Smooth scroll to content area (after open class applied)
         setTimeout(function() {
-          contentArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 100);
+          var navHeight = document.querySelector('nav') ? document.querySelector('nav').offsetHeight : 60;
+          var top = window.pageYOffset + contentArea.getBoundingClientRect().top - navHeight - 16;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        }, 50);
       }
 
       function closeAll() {
