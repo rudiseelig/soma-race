@@ -130,7 +130,18 @@
 /* --- Responsive --- */
 @media (max-width: 768px) {
   .hero.race-hero {
+    padding-top: 50px;
+    min-height: 0;
+  }
+
+  .hero-svg-desktop {
     display: none !important;
+  }
+
+  .hero-svg-mobile {
+    display: block !important;
+    width: 100%;
+    height: auto;
   }
 
   .scroll-indicator-bar {
