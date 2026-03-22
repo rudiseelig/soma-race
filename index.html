@@ -203,19 +203,12 @@
 
     if (!overlay || !dialItems || !hamburger || !dial) return;
 
-    var radius = dial.offsetWidth / 2;
     var itemCount = items.length;
-    var angleSpread = 15; // degrees between items
-    var startAngle = -((itemCount - 1) * angleSpread) / 2; // center items vertically
-    var currentRotation = 0;
-    var isDragging = false;
-    var startY = 0;
-    var lastY = 0;
-    var velocity = 0;
+    var angleSpread = 15;
+    var startAngle = -((itemCount - 1) * angleSpread) / 2;
 
-    // Position items along the right edge of the circle
     function positionItems() {
-      radius = dial.offsetWidth / 2;
+      var radius = dial.offsetWidth / 2;
       items.forEach(function(item, i) {
         var angle = startAngle + (i * angleSpread);
         var rad = angle * (Math.PI / 180);
@@ -227,7 +220,6 @@
       });
     }
 
-    // Open/close
     hamburger.addEventListener('click', function() {
       var isOpen = overlay.classList.toggle('open');
       hamburger.classList.toggle('active');
@@ -238,57 +230,9 @@
       }
     });
 
-    // On link click — keep overlay visible during navigation to prevent flash
-    items.forEach(function(item) {
-      item.addEventListener('click', function(e) {
-        // Don't close the overlay — let it stay as a dark screen while the page loads
-      });
-    });
+    // Prevent scroll/drag on the overlay
+    overlay.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
 
-    // Drag to rotate
-    function onStart(e) {
-      isDragging = true;
-      var touch = e.touches ? e.touches[0] : e;
-      startY = touch.clientY;
-      lastY = startY;
-      velocity = 0;
-      dialItems.style.transition = 'none';
-    }
-
-    function onMove(e) {
-      if (!isDragging) return;
-      var touch = e.touches ? e.touches[0] : e;
-      var deltaY = touch.clientY - lastY;
-      velocity = deltaY;
-      lastY = touch.clientY;
-      currentRotation += deltaY * 0.3;
-      // Clamp rotation
-      var maxRot = 20;
-      var minRot = -20;
-      currentRotation = Math.max(minRot, Math.min(maxRot, currentRotation));
-      dialItems.style.transform = 'rotate(' + currentRotation + 'deg)';
-    }
-
-    function onEnd() {
-      if (!isDragging) return;
-      isDragging = false;
-      dialItems.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-      // Snap to nearest item
-      var snapAngle = Math.round(currentRotation / angleSpread) * angleSpread;
-      snapAngle = Math.max(-20, Math.min(20, snapAngle));
-      currentRotation = snapAngle;
-      dialItems.style.transform = 'rotate(' + currentRotation + 'deg)';
-    }
-
-    overlay.addEventListener('touchstart', onStart, { passive: true });
-    overlay.addEventListener('touchmove', onMove, { passive: true });
-    overlay.addEventListener('touchend', onEnd);
-    overlay.addEventListener('mousedown', onStart);
-    overlay.addEventListener('mousemove', onMove);
-    overlay.addEventListener('mouseup', onEnd);
-    overlay.addEventListener('mouseleave', onEnd);
-
-    // Initial position on resize
     window.addEventListener('resize', function() {
       if (overlay.classList.contains('open')) positionItems();
     });

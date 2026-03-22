@@ -145,17 +145,11 @@
     var items = document.querySelectorAll('.dial-item');
     var dial = document.getElementById('rotary-dial');
     if (!overlay || !dialItems || !hamburger || !dial) return;
-    var radius = dial.offsetWidth / 2;
     var itemCount = items.length;
     var angleSpread = 15;
     var startAngle = -((itemCount - 1) * angleSpread) / 2;
-    var currentRotation = 0;
-    var isDragging = false;
-    var startY = 0;
-    var lastY = 0;
-    var velocity = 0;
     function positionItems() {
-      radius = dial.offsetWidth / 2;
+      var radius = dial.offsetWidth / 2;
       items.forEach(function(item, i) {
         var angle = startAngle + (i * angleSpread);
         var rad = angle * (Math.PI / 180);
@@ -173,42 +167,7 @@
       document.body.style.overflow = isOpen ? 'hidden' : '';
       if (isOpen) { setTimeout(positionItems, 10); }
     });
-    items.forEach(function(item) {
-      item.addEventListener('click', function(e) {
-        // Keep overlay visible during navigation to prevent flash
-      });
-    });
-    function onStart(e) {
-      isDragging = true;
-      var touch = e.touches ? e.touches[0] : e;
-      startY = touch.clientY; lastY = startY; velocity = 0;
-      dialItems.style.transition = 'none';
-    }
-    function onMove(e) {
-      if (!isDragging) return;
-      var touch = e.touches ? e.touches[0] : e;
-      var deltaY = touch.clientY - lastY;
-      velocity = deltaY; lastY = touch.clientY;
-      currentRotation += deltaY * 0.3;
-      currentRotation = Math.max(-20, Math.min(20, currentRotation));
-      dialItems.style.transform = 'rotate(' + currentRotation + 'deg)';
-    }
-    function onEnd() {
-      if (!isDragging) return;
-      isDragging = false;
-      dialItems.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-      var snapAngle = Math.round(currentRotation / angleSpread) * angleSpread;
-      snapAngle = Math.max(-20, Math.min(20, snapAngle));
-      currentRotation = snapAngle;
-      dialItems.style.transform = 'rotate(' + currentRotation + 'deg)';
-    }
-    overlay.addEventListener('touchstart', onStart, { passive: true });
-    overlay.addEventListener('touchmove', onMove, { passive: true });
-    overlay.addEventListener('touchend', onEnd);
-    overlay.addEventListener('mousedown', onStart);
-    overlay.addEventListener('mousemove', onMove);
-    overlay.addEventListener('mouseup', onEnd);
-    overlay.addEventListener('mouseleave', onEnd);
+    overlay.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
     window.addEventListener('resize', function() { if (overlay.classList.contains('open')) positionItems(); });
   })();
   </script>
