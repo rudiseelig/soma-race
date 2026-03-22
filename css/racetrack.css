@@ -132,8 +132,7 @@
   .hero.race-hero {
     padding-top: 50px;
     min-height: 0;
-    background: var(--bg);
-  }
+}
 
   .hero-svg-desktop {
     display: none !important;
